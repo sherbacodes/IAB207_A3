@@ -1,0 +1,78 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IAB207 Assignment 3</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand page-title" href="{{ url_for('main.index') }}">Rhythmix Nation</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                My Account
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="404.html">My Profile</a></li>
+                                <li><a class="dropdown-item" href="user_history.html">Events</a></li>
+                                <li><a class="dropdown-item" href="404.html">Change Password</a></li>
+                                <li><a class="dropdown-item" href="404.html">Help/Support</a></li>
+                                <li><a class="dropdown-item" href="404.html">Sign Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="d-flex ms-3" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Flask Flash Messages -->
+        <div class="container-fluid">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissible fade show mt-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        {% block header %}{% endblock %}
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <div class="container-fluid">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a class="mb-3 mb-md-0 text-muted" href="404.html">© 2024 Rhythmix Nation</a>
+            </div>
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3"><a class="text-muted" href="https://www.instagram.com" target="_blank"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a></li>
+                <li class="ms-3"><a class="text-muted" href="https://www.facebook.com" target="_blank"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a></li>
+                <li class="ms-3"><a class="text-muted" href="https://www.youtube.com" target="_blank"><i class="bi bi-youtube" style="font-size: 1.5rem;"></i></a></li>
+                <li class="ms-3"><a class="text-muted" href="https://www.tiktok.com" target="_blank"><i class="bi bi-tiktok" style="font-size: 1.5rem;"></i></a></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

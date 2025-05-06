@@ -1,0 +1,217 @@
+/* Global and body styling */
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background-color: #fff;
+  color: #a600ff !important;
+}
+
+/* Default text (normal weight) */
+.text-muted {
+  color: #a600ff !important;
+}
+
+.form-control::placeholder {
+  color: #a600ff;
+}
+
+/* Bold elements only where needed */
+strong,
+.modal-label,
+.section-title,
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
+/* Header */
+header {
+  padding-inline: 15px;
+}
+
+.navbar {
+  background-color: #fff;
+}
+
+/* Navbar brand and links */
+.navbar-brand {
+  font-weight: bold;
+  color: #a600ff !important;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  color: #ff8400 !important;
+}
+
+.nav-link {
+  font-weight: bold;
+  color: #a600ff !important;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #ff8400 !important;
+}
+
+/* Dropdown items color */
+.dropdown-item {
+  color: #a600ff;
+}
+
+.dropdown-item:hover {
+  color: #ff8400;
+  background-color: transparent;
+}
+
+/* Carousel */
+.carousel-indicators button {
+  background-color: #a600ff;
+}
+
+.carousel-indicators .active {
+  background-color: #ff8400;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+  width: auto;
+  height: auto;
+  font-size: 2rem;
+  color: #a600ff;
+}
+
+.carousel-control-prev::after,
+.carousel-control-next::after {
+  content: '';
+}
+
+.carousel-control-prev-icon::before {
+  content: '⟨';
+}
+
+.carousel-control-next-icon::before {
+  content: '⟩';
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  color: #ff8400;
+}
+
+/* Category navigation */
+.category {
+  color: #a600ff;
+}
+
+.category:hover {
+  color: #a600ff !important;
+  background: none !important;
+  cursor: default;
+  text-decoration: none;
+}
+
+/* Cards */
+.custom-card {
+  max-width: 18rem;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+.card-color {
+  background-color: #ff8400;
+  border-color: #fff;
+}
+
+/* Buttons */
+.button-color {
+  font-weight: bold;
+  background-color: #a600ff;
+  border-color: #a600ff;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+/* Button color stays correct on all states */
+.button-color,
+.button-color:hover,
+.button-color:focus,
+.button-color:active,
+.button-color.active,
+.button-color:visited {
+  background-color: #a600ff !important;
+  border-color: #a600ff !important;
+  color: #fff !important;
+}
+
+/* Hover effect for buttons with button-hover class */
+.button-color.button-hover:hover,
+.button-color.button-hover:focus,
+.button-color.button-hover:active {
+  color: #ff8400 !important;
+  background-color: #a600ff !important;
+  border-color: #a600ff !important;
+}
+
+/* Pagination */
+.page-link {
+  color: #a600ff;
+}
+
+.pagination .page-link:hover {
+  background-color: #ff8400;
+  border-color: #ff8400;
+  color: #fff;
+}
+
+.pagination .active .page-link {
+  background-color: #ff8400;
+  border-color: #ff8400;
+}
+
+/* Footer */
+footer {
+  padding-inline: 15px;
+}
+
+/* Layout helpers */
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* Section titles */
+.form-label,
+.section-title {
+  color: #a600ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Optional: spacing for strong labels */
+strong {
+  margin-right: 4px;
+}
+
+/* Card/ModalCard header and body styling */
+.modal-header .modal-title {
+  font-weight: bold;
+  color: #a600ff;
+}
+.modal-body {
+  font-weight: normal;
+  color: #a600ff;
+}
+.card-title,
+.card-text {
+  color: #ffffff;
+}

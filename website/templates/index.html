@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block content %}
+      <main class="container">
+        <div id="carouselExampleIndicators" class="carousel slide mb-5" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="./static/img/image1.jpg" class="d-block w-100" alt="Image 1">
+            </div>
+            <div class="carousel-item">
+              <img src="./static/img/image2.jpg" class="d-block w-100" alt="Image 2">
+            </div>
+            <div class="carousel-item">
+              <img src="./static/img/image3.jpg" class="d-block w-100" alt="Image 3">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        <nav class="navbar navbar-expand-lg">
+          <div class="container">
+            <a class="navbar-brand category">Category</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Classical</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Pop</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Rock</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Hip-Hop</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Rap</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Country</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Jazz</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Electronic</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="404.html">Jazz</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image4.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title ">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-success mb-2">Open</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <a href="events.html" class="btn btn-primary button-color button-hover button-hover">Book Now!</a>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image5.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-danger mb-2">Sold Out</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <button type="button" class="btn btn-primary button-color button-hover" data-bs-toggle="modal" data-bs-target="#soldOutModal">
+                  Book Now!
+                </button>
+                <div class="modal fade" id="soldOutModal" tabindex="-1" aria-labelledby="soldOutModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="soldOutModalLabel">Sold Out!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p class="fs-5">Oops! The tickets for this event have flown off the shelves. We're really sorry, but this one is sold out. Why not check back later or explore our other exciting events <span style="font-size: 1.5rem;">🎉</span></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary button-color button-hover button-hover" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image6.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-success mb-2">Open</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <a href="events.html" class="btn btn-primary button-color button-hover">Book Now!</a>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image7.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-danger mb-2">Cancelled</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <button type="button" class="btn btn-primary button-color button-hover" data-bs-toggle="modal" data-bs-target="#cancelledModal">
+                  Book Now!
+                </button>
+                <div class="modal fade" id="cancelledModal" tabindex="-1" aria-labelledby="cancelledModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="cancelledModalLabel">Event Cancelled</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p class="fs-5">Oh no! This event has been cancelled. We are really sorry for the inconvenience. Check out our other events or come back soon for updates <span style="font-size: 1.5rem;">😢</span></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary button-color button-hover button-hover" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image7.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-success mb-2">Open</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <a href="events.html" class="btn btn-primary button-color button-hover">Book Now!</a>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image6.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-danger mb-2">Sold Out</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <button type="button" class="btn btn-primary button-color button-hover" data-bs-toggle="modal" data-bs-target="#soldOutModal">
+                  Book Now!
+                </button>
+                <div class="modal fade" id="soldOutModal" tabindex="-1" aria-labelledby="soldOutModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="soldOutModalLabel">Sold Out!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p class="fs-5">Oops! The tickets for this event have flown off the shelves. We're really sorry, but this one is sold out. Why not check back later or explore our other exciting events <span style="font-size: 1.5rem;">🎉</span></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary button-color button-hover button-hover" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image5.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-danger mb-2">Cancelled</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <button type="button" class="btn btn-primary button-color button-hover" data-bs-toggle="modal" data-bs-target="#cancelledModal">
+                  Book Now!
+                </button>
+                <div class="modal fade" id="cancelledModal" tabindex="-1" aria-labelledby="cancelledModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="cancelledModalLabel">Event Cancelled</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p class="fs-5">Oh no! This event has been cancelled. We are really sorry for the inconvenience. Check out our other events or come back soon for updates <span style="font-size: 1.5rem;">😢</span></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary button-color button-hover button-hover" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card custom-card card-color">
+              <img src="./static/img/image4.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Lorem ipsum</h5>
+                <span class="badge rounded-pill text-bg-success mb-2">Open</span>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam sit laboriosam corrupti accusamus! Quae rem inventore error natus excepturi consectetur libero commodi cupiditate ut? Quibusdam ipsa veritatis expedita eveniet?</p>
+                <a href="events.html" class="btn btn-primary button-color button-hover">Book Now!</a>
+              </div>
+            </div>
+          </div>
+        <nav aria-label="Page navigation example" class="w-100 mt-4">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <span class="page-link disabled">Previous</span>
+            </li>
+            <li class="page-item active" aria-current="page">
+              <span class="page-link">1</span>
+            </li>
+            <li class="page-item"><a class="page-link" href="404.html">2</a></li>
+            <li class="page-item"><a class="page-link" href="404.html">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="404.html">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </main>
+      {% endblock %}
