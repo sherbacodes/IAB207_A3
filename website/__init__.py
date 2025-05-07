@@ -7,25 +7,30 @@ import datetime
 import os
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 def create_app():
     app = Flask(__name__)
     Bootstrap5(app)
-    Bcrypt(app)
+
     app.secret_key = os.getenv('SECRET_KEY', 'devkey')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sitedata.sqlite'
-    db.init_app(app)
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'img')
+
+    db.init_app(app)
+    bcrypt.init_app(app)
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
     from .models import User
+
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    # Register Blueprints
     from . import views
     app.register_blueprint(views.main_bp)
 
@@ -38,14 +43,17 @@ def create_app():
     from . import auth
     app.register_blueprint(auth.auth_bp)
 
+    # 404 error handler
     @app.errorhandler(404)
     def not_found(e):
         return render_template("404.html", error=e)
 
+    # Inject current year into templates
     @app.context_processor
     def get_context():
         return dict(year=datetime.datetime.today().year)
 
+    # Create DB tables
     with app.app_context():
         db.create_all()
 

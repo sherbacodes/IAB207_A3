@@ -8,7 +8,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(255), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    date_joined = db.Column(db.DateTime, default=datetime)
+    date_joined = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f"Username: {self.username}"
