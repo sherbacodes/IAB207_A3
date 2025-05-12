@@ -215,3 +215,10 @@ strong {
 .card-text {
   color: #ffffff;
 }
+
+/* Flash alert colouring */
+.custom-alert {
+  background-color: #f3e8ff;
+  color: #a600ff;
+  border: 1px solid #a600ff;
+}

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField
-from wtforms.validators import InputRequired, Email, EqualTo
+from wtforms.validators import InputRequired, Email, EqualTo, Regexp, ValidationError
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
@@ -26,20 +26,33 @@ class LoginForm(FlaskForm):
     password=PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
+# Custom validator to check for spaces in the field
+def no_spaces(form, field):
+    if ' ' in field.data:
+        raise ValidationError("Spaces are not allowed in this field.")
+
 # this is the registration form
 class RegisterForm(FlaskForm):
-    username = StringField("User Name", validators=[InputRequired()])
-    first_name=StringField("First Name", validators=[InputRequired()])
-    last_name=StringField("Last Name", validators=[InputRequired()])
-    mobile_number=StringField("Mobile Number", validators=[InputRequired()])
-    street_address=StringField("Street Address", validators=[InputRequired()])
-    # email address should be unique
-    email = StringField("Email Address", validators=[Email("Please enter a valid email")])
-    # linking two fields - password should be equal to data entered in confirm
-    password=PasswordField("Password", validators=[InputRequired(), EqualTo('confirm', message="Passwords should match")])
-    confirm = PasswordField("Confirm Password")
+    username = StringField("User Name", validators=[InputRequired(), no_spaces])
+    first_name = StringField("First Name", validators=[InputRequired(), no_spaces])
+    last_name = StringField("Last Name", validators=[InputRequired(), no_spaces])
+    
+    # Enforce mobile format: starts with 04 and has 10 digits only, no spaces
+    mobile_number = StringField("Mobile Number", validators=[
+        InputRequired(),
+        Regexp(r'^04\d{8}$', message="Enter a valid 10-digit mobile number starting with 04 (no spaces).")
+    ])
+    
+    street_address = StringField("Street Address", validators=[InputRequired()])
+    email = StringField("Email Address", validators=[Email("Please enter a valid email."), no_spaces])
+    
+    password = PasswordField("Password", validators=[
+        InputRequired(),
+        EqualTo('confirm', message="Passwords should match"),
+        no_spaces
+    ])
+    confirm = PasswordField("Confirm Password", validators=[no_spaces])
 
-    # submit button
     submit = SubmitField("Register")
 
 # User comment
