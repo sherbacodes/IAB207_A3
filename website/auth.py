@@ -10,7 +10,7 @@ auth_bp = Blueprint('auth', __name__)
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        username = form.user_name.data
+        username = form.username.data
         password = form.password.data
         email = form.email.data
 
@@ -38,7 +38,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        username = form.user_name.data
+        username = form.username.data
         password = form.password.data
         user = db.session.scalar(db.select(User).where(User.username == username))
 
