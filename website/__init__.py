@@ -36,7 +36,7 @@ def create_app():
 
     try:
         from . import events as events_module
-        app.register_blueprint(events_module.eventbpdestbp)
+        app.register_blueprint(events_module.eventbp)
     except ImportError:
         print("Warning: events.py not found. Skipping its registration.")
 
