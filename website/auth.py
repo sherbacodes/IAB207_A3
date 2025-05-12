@@ -25,7 +25,15 @@ def register():
             return redirect(url_for('auth.register'))
 
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        new_user = User(username=username, password_hash=hashed_password, email=email)
+        new_user = User(
+            username=username,
+            password_hash=hashed_password,
+            email=email,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            phone_number=form.mobile_number.data,
+            street_address=form.street_address.data
+        )
         db.session.add(new_user)
         db.session.commit()
         flash('Registration successful. You can now log in.', 'success')
