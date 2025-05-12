@@ -222,3 +222,20 @@ strong {
   color: #a600ff;
   border: 1px solid #a600ff;
 }
+
+/* Sticky Footer Support */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+}
+
+.footer {
+  margin-top: auto;
+  background-color: #fff !important;
+  border-top: none !important;
+}
