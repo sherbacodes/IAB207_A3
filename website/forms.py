@@ -9,7 +9,11 @@ ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
 # Create an event Database:
 class EventManagementForm(FlaskForm):
     event_name = StringField('Event name', validators=[InputRequired()])
-    category_id = SelectField('Category', coerce=int, validators=[InputRequired()])
+    category_id = SelectField(
+        'Category',
+        coerce=int,
+        validators=[NumberRange(min=1, message="Please select a category.")]
+    )
     event_description = TextAreaField('Description', validators=[InputRequired()])
     start_date = DateField('Start Date', validators=[InputRequired()])
     end_date = DateField('End Date', validators=[InputRequired()])
@@ -20,7 +24,7 @@ class EventManagementForm(FlaskForm):
         FileRequired(message='Image cannot be empty'),
         FileAllowed(ALLOWED_FILE, message='Only supports PNG, JPG, png, jpg')
     ])
-    ticket_price = FloatField('Ticket Price ($)', validators=[InputRequired(), NumberRange(min=0, message='Ticket price cannot be negative')])
+    ticket_price = IntegerField('Ticket Price ($)', validators=[InputRequired(), NumberRange(min=0, message='Ticket price cannot be negative')])
     capacity = IntegerField('Capacity', validators=[InputRequired(), NumberRange(min=1, message='Capacity must be at least 1')])
     submit = SubmitField("Create")
 

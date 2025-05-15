@@ -21,7 +21,7 @@ def show(id):
 def create():
     print('Method type: ', request.method)
     form = EventManagementForm()
-    form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+    form.category_id.choices = [(-1, "Select a category...")] + [(c.id, c.name) for c in Category.query.all()]
 
     if form.validate_on_submit():
         db_file_path = check_upload_file(form)
