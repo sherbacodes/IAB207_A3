@@ -239,3 +239,17 @@ main {
   background-color: #fff !important;
   border-top: none !important;
 }
+
+.card.custom-card {
+  min-height: 500px;
+  max-height: 500px; /* or whatever looks right for your design */
+  display: flex;
+  flex-direction: column;
+}
+
+.card.custom-card .card-body {
+  flex-grow: 1;
+  overflow-y: auto;        /* enables vertical scrolling */
+  max-height: 250px;       /* controls scrollable area height */
+  padding-right: 10px;     /* prevents scrollbar overlap on text */
+}

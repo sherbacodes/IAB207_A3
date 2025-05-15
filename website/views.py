@@ -21,3 +21,8 @@ def search():
         return render_template('index.html', events=events)
     else:
         return redirect(url_for('main.index'))
+
+@main_bp.route('/event/<int:event_id>')
+def event_detail(event_id):
+    event = db.get_or_404(Event, event_id)
+    return render_template('event_detail.html', event=event)
