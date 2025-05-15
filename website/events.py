@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from .models import Event, Comment
+from .models import Event, Comment, Category
 from .forms import EventManagementForm, CommentForm
 from . import db
 import os
@@ -21,12 +21,13 @@ def show(id):
 def create():
     print('Method type: ', request.method)
     form = EventManagementForm()
+    form.category_id.choices = [(c.id, c.name) for c in Category.query.all()]
+
     if form.validate_on_submit():
-        #call the function that checks and returns image
         db_file_path = check_upload_file(form)
         event = Event(
             event_name=form.event_name.data,
-            event_category=form.event_category.data,
+            category_id=form.category_id.data,
             event_description=form.event_description.data,
             start_date=form.start_date.data,
             end_date=form.end_date.data,
@@ -38,13 +39,11 @@ def create():
             capacity=form.capacity.data,
             user_id=current_user.id
         )
-        # add the object to the db session
         db.session.add(event)
-        # commit to the database
         db.session.commit()
         flash('Successfully created new music event', 'success')
-        #Always end with redirect when form is valid
         return redirect(url_for('event.create'))
+
     return render_template('experiences/create.html', form=form)
 
 def check_upload_file(form):

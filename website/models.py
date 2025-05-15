@@ -22,7 +22,7 @@ class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     event_name = db.Column(db.String(150), nullable=False)
-    event_category = db.Column(db.String(150), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     event_description = db.Column(db.Text, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     start_time = db.Column(db.String(150), nullable=False)
@@ -57,3 +57,9 @@ class Order(db.Model):
     date_ordered = db.Column(db.DateTime, default=datetime)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+
+    events = db.relationship('Event', backref='category')
