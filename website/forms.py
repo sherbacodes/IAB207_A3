@@ -1,24 +1,25 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField
-from wtforms.validators import InputRequired, Email, EqualTo, Regexp, ValidationError
+from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, IntegerField, DateField, TimeField, FloatField
+from wtforms.validators import InputRequired, Email, EqualTo, Regexp, ValidationError, NumberRange
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
 
 # Create an event Database:
 class EventManagementForm(FlaskForm):
-    event_name = StringField('Event', validators=[InputRequired()])
-    event_categorty = StringField('Category', validators=[InputRequired()])
+    event_name = StringField('Event name', validators=[InputRequired()])
+    event_category = StringField('Category', validators=[InputRequired()])
     event_description = TextAreaField('Description', validators=[InputRequired()])
-    start_date = StringField('Start Date', validators=[InputRequired()])
-    start_time = StringField('Start Time', validators=[InputRequired()])
-    end_date = StringField('End Date', validators=[InputRequired()])
-    end_time = StringField('End Time', validators=[InputRequired()])
+    # Still need to validate dates and times here
+    start_date = DateField('Start Date', validators=[InputRequired()])   
+    end_date = DateField('End Date', validators=[InputRequired()])   
+    start_time = TimeField('Start Time', validators=[InputRequired()])   
+    end_time = TimeField('End Time', validators=[InputRequired()]) 
     event_location = StringField('Location', validators=[InputRequired()])
     event_image = FileField('Event Image', validators=[FileRequired(message='Image cannot be empty'),FileAllowed(ALLOWED_FILE, message='Only supports PNG, JPG, png, jpg')])
-    ticket_price = StringField('Ticket Price', validators=[InputRequired()])
-    capacity = StringField('Capacity', validators=[InputRequired()])
-    submit = SubmitField("Create")
+    ticket_price = FloatField('Ticket Price ($)', validators=[InputRequired(), NumberRange(min=0,message='Ticket price cannot be negative')])
+    capacity = IntegerField('Capacity', validators=[InputRequired(), NumberRange(min=1,message='Capacity must be at least 1')])    # Different message is appearing??
+    submit = SubmitField("Create") 
 
 # creates the login information
 class LoginForm(FlaskForm):

@@ -78,7 +78,7 @@
                   <h5 class="card-title">{{ event.name }}</h5>
                   <p class="card-text">{{ event.event_description }}</p>
               </div>
-              <div class="card-footer"><a href="{{ url_for('events.show', id=events.id) }}" class ="btn btn-danger"> View Details </a></div>
+              <div class="card-footer"><a href="{{ url_for('event.show', id=events.id) }}" class ="btn btn-danger"> View Details </a></div>
             </div>
             {% endfor %}
         </div>

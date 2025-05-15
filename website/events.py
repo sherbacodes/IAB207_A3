@@ -24,8 +24,20 @@ def create():
     if form.validate_on_submit():
         #call the function that checks and returns image
         db_file_path = check_upload_file(form)
-        event = Event(name=form.name.data,description=form.description.data, 
-        image=db_file_path)
+        event = Event(
+            event_name=form.event_name.data,
+            event_category=form.event_category.data,
+            event_description=form.event_description.data,
+            start_date=form.start_date.data,
+            end_date=form.end_date.data,
+            start_time=form.start_time.data.strftime('%H:%M'),
+            end_time=form.end_time.data.strftime('%H:%M'),
+            event_location=form.event_location.data,
+            event_image=db_file_path,
+            ticket_price=form.ticket_price.data,
+            capacity=form.capacity.data,
+            user_id=current_user.id
+        )
         # add the object to the db session
         db.session.add(event)
         # commit to the database
@@ -37,7 +49,7 @@ def create():
 
 def check_upload_file(form):
     #get file data from form  
-    fp = form.image.data
+    fp = form.event_image.data
     filename = fp.filename
     #get the current path of the module file… store image file relative to this path  
     BASE_PATH = os.path.dirname(__file__)
