@@ -1,23 +1,102 @@
 {% extends "base.html" %}
 
-{% from "bootstrap5/form.html" import render_form %}
-
 {% block content %}
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="page-header mb-4">
                 <h4>{{ heading }}</h4>
             </div>
 
-            <!-- Render WTForm using Bootstrap helper -->
-            {{ render_form(form) }}
+            <form method="POST">
+                {{ form.hidden_tag() }}
 
-            <!-- Register link if user is on login page -->
+                {% if heading == 'Register' %}
+                <div class="d-xl-flex flex-xl-row flex-column align-items-center justify-content-center gap-4 my-4">
+                    <div class="text-center w-100 w-xl-50 mb-3 mb-xl-0">
+                        <img src="{{ url_for('static', filename='img/rhythmix_intro.jpg') }}" 
+                            class="img-fluid rounded shadow" 
+                            alt="Rhythmix Nation Events Overview"
+                            style="max-width: 100%;">
+                    </div>
+                    <div class="w-100 w-xl-50">
+                        <p class="text-muted">
+                            Rhythmix Nation is a platform designed to streamline music event management and participation.<br><br>
+                            Whether you're an event organiser or an attendee, our system provides an all-in-one solution for event creation, ticketing, and community engagement.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 w-100">
+                    <p class="text-muted">
+                        <strong>Register now to access and manage your events with ease!</strong>
+                    </p>
+                </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.first_name.label(class="form-label") }}
+                            {{ form.first_name(class="form-control") }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.last_name.label(class="form-label") }}
+                            {{ form.last_name(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control") }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.mobile_number.label(class="form-label") }}
+                            {{ form.mobile_number(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control") }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.street_address.label(class="form-label") }}
+                            {{ form.street_address(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control") }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.confirm.label(class="form-label") }}
+                            {{ form.confirm(class="form-control") }}
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    {{ form.submit(class="btn btn-primary button-color button-hover") }}
+                </div>
+            </form>
+
             {% if heading == 'Login' %}
-            <div class="mt-3">
-                <p>New user? <a href="{{ url_for('auth.register') }}">Click here</a> to register.</p>
-            </div>
+                <div class="mt-3">
+                    <p>New user? <a href="{{ url_for('auth.register') }}">Click here</a> to register.</p>
+                </div>
             {% endif %}
         </div>
     </div>
