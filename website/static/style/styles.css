@@ -253,3 +253,14 @@ main {
   max-height: 250px;       /* controls scrollable area height */
   padding-right: 10px;     /* prevents scrollbar overlap on text */
 }
+
+.custom-link {
+    color: var(--primary-color); /* or a specific color like #ff6600 */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.custom-link:hover {
+    color: var(--primary-hover-color); /* optional hover effect */
+    text-decoration: underline;
+}
