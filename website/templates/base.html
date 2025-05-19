@@ -34,7 +34,7 @@
                                     My Account
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="404.html">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">My Profile</a></li>
                                     <li><a class="dropdown-item" href="user_history.html">Events</a></li>
                                     <li><a class="dropdown-item" href="event_management.html">Manage Events</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('event.create') }}">Create Event</a></li>

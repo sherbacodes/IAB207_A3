@@ -45,7 +45,7 @@ class RegisterForm(FlaskForm):
     first_name = StringField("First Name", validators=[InputRequired(), no_spaces])
     last_name = StringField("Last Name", validators=[InputRequired(), no_spaces])
 
-    mobile_number = StringField("Mobile Number", validators=[
+    phone_number = StringField("Mobile Number", validators=[
         InputRequired(),
         Regexp(r'^04\d{8}$', message="Enter a valid 10-digit mobile number starting with 04 (no spaces).")
     ])
@@ -72,3 +72,31 @@ class RegisterForm(FlaskForm):
 class CommentForm(FlaskForm):
     content = TextAreaField('Comment', validators=[InputRequired()])
     submit = SubmitField('Post Comment')
+
+# Profile editing form
+class ProfileEditForm(FlaskForm):
+    username = StringField("User Name", validators=[InputRequired(), no_spaces])
+    first_name = StringField("First Name", validators=[InputRequired(), no_spaces])
+    last_name = StringField("Last Name", validators=[InputRequired(), no_spaces])
+
+    phone_number = StringField("Mobile Number", validators=[
+        InputRequired(),
+        Regexp(r'^04\d{8}$', message="Enter a valid 10-digit mobile number starting with 04 (no spaces).")
+    ])
+
+    street_address = StringField("Street Address", validators=[InputRequired()])
+    email = StringField("Email Address", validators=[Email("Please enter a valid email."), no_spaces])
+
+    gender = SelectField("Gender", choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')], validators=[InputRequired()])
+
+    profile_image = FileField("Profile Image (optional)", validators=[
+        FileAllowed(ALLOWED_FILE, message='Only PNG, JPG, JPEG files are allowed.')
+    ])
+
+    password = PasswordField("New Password", validators=[
+        EqualTo('confirm', message="Passwords should match"),
+        no_spaces
+    ])
+    confirm = PasswordField("Confirm New Password", validators=[no_spaces])
+
+    submit = SubmitField("Update Profile")

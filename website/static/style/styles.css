@@ -274,3 +274,12 @@ main {
     color: var(--primary-hover-color); /* optional hover effect */
     text-decoration: underline;
 }
+
+.profile-avatar {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem; /* This controls the spacing */
+}

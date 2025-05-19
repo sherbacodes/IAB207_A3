@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="page-header text-center mb-4">
+                <h4>{{ heading }}</h4>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+
+                <div class="text-center w-100 w-xl-50 mb-3 mb-xl-0">
+                    <img src="{{ url_for('static', filename=current_user.profile_image or 'img/default_avatar.png') }}" 
+                        class="profile-avatar"
+                        alt="Your Profile Picture">
+                </div>
+                    <div class="w-100 w-xl-50">
+                        <p class="text-center">
+                            Update your profile details including name, contact information, and your profile picture. You can also change your password if you'd like — just leave the password fields blank to keep your current one.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.first_name.label(class="form-label") }}
+                        {{ form.first_name(class="form-control") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.last_name.label(class="form-label") }}
+                        {{ form.last_name(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.phone_number.label(class="form-label") }}
+                        {{ form.phone_number(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.street_address.label(class="form-label") }}
+                        {{ form.street_address(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.confirm.label(class="form-label") }}
+                        {{ form.confirm(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.gender.label(class="form-label") }}
+                        {{ form.gender(class="form-select") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.profile_image.label(class="form-label") }}
+                        {{ form.profile_image(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form.submit(class="btn btn-primary button-color button-hover") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
