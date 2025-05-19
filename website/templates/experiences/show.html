@@ -20,7 +20,7 @@
             <div class="card my-3">  
                 <div class="card-body">  
                     <div class="media">  
-                    <img class="align-self-start mr-3" src="{{ event.event_image }}">  
+                    <img class="align-self-start mr-3" src="{{ event.image }}">  
                         <div class="media-body">  
                             <small class="font-weight-bold text-muted">Stay 2 nights</small>  
                             <h5 class="mt-0">{{ event.name }}</h5>  
@@ -48,7 +48,15 @@
     </div>  
 
     <div class="row border-bottom"> 
-    {{ render_form(form,"/experiences/{0}/comment".format(event.id)) }}
+        {% if user_authenticated %}
+        {{ render_form(form, "/experiences/{0}/comment".format(event.id)) }}
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            You must be logged in to create a comment.
+        </div>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary mb-3">Log In</a>
+    {% endif %}
+
     
     {% for comment in event.comments %}
     <div class="col-md-12">  
