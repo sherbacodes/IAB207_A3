@@ -14,7 +14,8 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False)
     date_joined = db.Column(db.DateTime, default=datetime.now())
     comments = db.relationship('Comment', backref='user')
-
+    gender = db.Column(db.String(10), nullable=False)
+    profile_image = db.Column(db.String(150), nullable=True, default='img/default_avatar.png')
     def __repr__(self):
         return f"Username: {self.username}"
 
@@ -32,8 +33,9 @@ class Event(db.Model):
     event_image = db.Column(db.String(150), nullable=False)
     ticket_price = db.Column(db.Float, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
-    comment = db.relationship('Comment', backref='event')
+    comment = db.relationship('Comment', backref='event', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    event_status = db.Column(db.String(20), nullable=False, default='Open')
 
     def __repr__(self):
         return f"Event Name: {self.event_name}"
@@ -42,7 +44,7 @@ class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, default=datetime)
+    date = db.Column(db.DateTime, default=datetime.now)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 

@@ -6,7 +6,7 @@ from wtforms import SelectField
 
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
 
-# Create an event Database:
+# Create an event form
 class EventManagementForm(FlaskForm):
     event_name = StringField('Event name', validators=[InputRequired()])
     category_id = SelectField(
@@ -28,10 +28,10 @@ class EventManagementForm(FlaskForm):
     capacity = IntegerField('Capacity', validators=[InputRequired(), NumberRange(min=1, message='Capacity must be at least 1')])
     submit = SubmitField("Create")
 
-# creates the login information
+# Login form
 class LoginForm(FlaskForm):
     username = StringField("User Name", validators=[InputRequired('Enter user name')])
-    password=PasswordField("Password", validators=[InputRequired('Enter user password')])
+    password = PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
 # Custom validator to check for spaces in the field
@@ -39,21 +39,26 @@ def no_spaces(form, field):
     if ' ' in field.data:
         raise ValidationError("Spaces are not allowed in this field.")
 
-# this is the registration form
+# Registration form
 class RegisterForm(FlaskForm):
     username = StringField("User Name", validators=[InputRequired(), no_spaces])
     first_name = StringField("First Name", validators=[InputRequired(), no_spaces])
     last_name = StringField("Last Name", validators=[InputRequired(), no_spaces])
-    
-    # Enforce mobile format: starts with 04 and has 10 digits only, no spaces
+
     mobile_number = StringField("Mobile Number", validators=[
         InputRequired(),
         Regexp(r'^04\d{8}$', message="Enter a valid 10-digit mobile number starting with 04 (no spaces).")
     ])
-    
+
     street_address = StringField("Street Address", validators=[InputRequired()])
     email = StringField("Email Address", validators=[Email("Please enter a valid email."), no_spaces])
-    
+
+    gender = SelectField("Gender", choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')], validators=[InputRequired()])
+
+    profile_image = FileField("Profile Image (optional)", validators=[
+        FileAllowed(ALLOWED_FILE, message='Only PNG, JPG, JPEG files are allowed.')
+    ])
+
     password = PasswordField("Password", validators=[
         InputRequired(),
         EqualTo('confirm', message="Passwords should match"),
@@ -63,7 +68,7 @@ class RegisterForm(FlaskForm):
 
     submit = SubmitField("Register")
 
-# User comment
+# Comment form
 class CommentForm(FlaskForm):
-    text = TextAreaField('Comment', [InputRequired()])
-    submit = SubmitField('Create')
+    content = TextAreaField('Comment', validators=[InputRequired()])
+    submit = SubmitField('Post Comment')

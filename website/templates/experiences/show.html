@@ -1,71 +1,111 @@
 {% extends 'base.html' %}
 
-{% from 'bootstrap5/form.html' import render_form %}
-
 {% block content %}
-
-<div class="container">  
-    <div class="row mt-5 mb-3">  
-        <div class="col-md-12">  
-            <div class="float-left">  
-            <h1 class="mb-0">{{ event.name }}</h1>  
-            <p>Popular Event</p>  
-            </div>   
-        </div>  
-    </div>  
-
-    <!-- Event --> 
-    <div class="row">  
-        <div class="col-md-12">  
-            <div class="card my-3">  
-                <div class="card-body">  
-                    <div class="media">  
-                    <img class="align-self-start mr-3" src="{{ event.image }}">  
-                        <div class="media-body">  
-                            <small class="font-weight-bold text-muted">Stay 2 nights</small>  
-                            <h5 class="mt-0">{{ event.name }}</h5>  
-                            <p>{{ event.event_description }}</p>  
-                            <a href="#" class="btn btn-danger">Book Now</a>  
-
-                            <!-- Show Cancel Button Only if Logged-in User is the Creator -->
-                            {% if current_user.id == event.creator_id %}
-                            <form action="{{ url_for('cancel_event', event_id=event.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this event?');">
-                                <button type="submit" class="btn btn-danger">Cancel Event</button>
-                            </form>
-                            {% endif %}
-                        </div>  
-                    </div>  
-                </div>  
-            </div>  
-        </div>  
+<main class="container my-5">
+  <div class="row align-items-center mb-4">
+    <div class="col-12 col-md-6 col-lg-5">
+      <img src="{{ event.event_image }}" alt="Event Image" class="img-fluid rounded mb-3 mb-md-0">
     </div>
-    <hr>
-    <!-- Comments -->  
-    <div class="row">  
-        <div class="col-md-12">  
-            <h2>Comments</h1>  
-        </div>  
-    </div>  
+    <div class="col-12 col-md-6 col-lg-7">
+      <h2 class="section-title mb-2">{{ event.event_name }}</h2>
 
-    <div class="row border-bottom"> 
-        {% if user_authenticated %}
-        {{ render_form(form, "/experiences/{0}/comment".format(event.id)) }}
-    {% else %}
-        <div class="alert alert-warning" role="alert">
-            You must be logged in to create a comment.
-        </div>
-        <a href="{{ url_for('auth.login') }}" class="btn btn-primary mb-3">Log In</a>
-    {% endif %}
+      <div class="d-flex flex-wrap mb-1">
+        <p class="mb-2 me-4">
+          <strong>Time:</strong> {{ event.start_time }} – {{ event.end_time }}
+        </p>
+        <p class="mb-2 me-4">
+          <strong>Date:</strong> {{ event.start_date.strftime('%d-%m-%Y') }} – {{ event.end_date.strftime('%d-%m-%Y') }}
+        </p>
+        <span class="badge rounded-pill text-bg-success mb-2">{{ event.event_status }}</span>
+      </div>
 
+      <p class="mb-2"><strong>Venue:</strong> {{ event.event_location }}</p>
+      <p>{{ event.event_description }}</p>
+
+      <button type="button" class="btn button-color button-hover" data-bs-toggle="modal" data-bs-target="#bookingModal">
+        Book Tickets
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="section-title mb-4">Comments</h3>
     
-    {% for comment in event.comments %}
-    <div class="col-md-12">  
-        <b>{{ comment.user.name }}</b>
-        <small>Posted On: {{ comment.date.strftime('%Y-%m-%d %H:%M:%S') }}</small>
-        <p>{{ comment.text }}</p>  
-    </div> 
-    {% endfor %} 
-    </div>  
-</div> 
+    {% for comment in event.comment.all() %}
+    <div class="d-flex align-items-start border rounded p-3 mb-3 shadow-sm bg-light">
+      <img src="{{ url_for('static', filename=comment.user.profile_image) }}"
+           alt="User Avatar"
+           class="rounded-circle me-3"
+           style="width: 50px; height: 50px;">
+      <div>
+        <div class="fw-bold mb-1">
+          {{ comment.user.first_name }}
+          <small class="text-muted">· {{ comment.date.strftime('%d %b %Y') }}</small>
+        </div>
+        <p class="mb-0">{{ comment.content }}</p>
+      </div>
+    </div>
+    {% else %}
+    <p class="text-muted">No comments yet.</p>
+    {% endfor %}
 
+    {% if user_authenticated %}
+    <div class="border rounded p-3 shadow-sm bg-white">
+      <form method="POST" action="{{ url_for('event.comment', id=event.id) }}">
+        {{ form.hidden_tag() }}
+        <div class="mb-4">
+          <label for="content" class="form-label modal-label">Add a Comment</label>
+          {{ form.content(class="form-control", rows="3", placeholder="Write your comment here...") }}
+        </div>
+        <button type="submit" class="btn button-color button-hover">Post Comment</button>
+      </form>
+    </div>
+    {% else %}
+    <p class="text-muted">Log in to post a comment.</p>
+    <a href="{{ url_for('auth.login') }}" class="btn button-color button-hover">Login</a>
+    {% endif %}
+  </div>
+
+  <!-- Booking Modal -->
+  <div class="modal fade" id="bookingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 modal-label" id="bookingModalLabel">Book Your Tickets</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form class="needs-validation" novalidate>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="eventDateLocation" class="form-label modal-label">Select Date & Location</label>
+              <select class="form-select" id="eventDateLocation" name="eventDateLocation" required>
+                <option value="" selected disabled>Select date & location</option>
+                <option value="{{ event.start_date }}-brisbane">{{ event.start_date }} - {{ event.event_location }}</option>
+              </select>
+              <div class="invalid-feedback">Please select a date and location.</div>
+            </div>
+            <div class="mb-3">
+              <label for="ticketType" class="form-label modal-label">Ticket Type</label>
+              <select class="form-select" id="ticketType" name="ticketType" required>
+                <option value="" selected disabled>Select ticket type</option>
+                <option value="general">General Admission - ${{ event.ticket_price }}</option>
+              </select>
+              <div class="invalid-feedback">Please select a ticket type.</div>
+            </div>
+            <div class="mb-3">
+              <label for="ticketQuantity" class="form-label modal-label">Number of Tickets</label>
+              <input type="number" class="form-control" id="ticketQuantity" name="ticketQuantity" min="1" max="10" required>
+              <div class="invalid-feedback">Please enter the number of tickets.</div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn button-color button-hover" data-bs-dismiss="modal">Go Back</button>
+            <a href="#" class="btn button-color button-hover">Book Now</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}
