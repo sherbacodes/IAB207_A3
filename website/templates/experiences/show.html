@@ -26,6 +26,13 @@
                             <h5 class="mt-0">{{ event.name }}</h5>  
                             <p>{{ event.event_description }}</p>  
                             <a href="#" class="btn btn-danger">Book Now</a>  
+
+                            <!-- Show Cancel Button Only if Logged-in User is the Creator -->
+                            {% if current_user.id == event.creator_id %}
+                            <form action="{{ url_for('cancel_event', event_id=event.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this event?');">
+                                <button type="submit" class="btn btn-danger">Cancel Event</button>
+                            </form>
+                            {% endif %}
                         </div>  
                     </div>  
                 </div>  
@@ -45,7 +52,8 @@
     
     {% for comment in event.comments %}
     <div class="col-md-12">  
-        <b>{{ comment.user.name }} <span class="ml-2 text-muted">January 2024</span></b>
+        <b>{{ comment.user.name }}</b>
+        <small>Posted On: {{ comment.date.strftime('%Y-%m-%d %H:%M:%S') }}</small>
         <p>{{ comment.text }}</p>  
     </div> 
     {% endfor %} 

@@ -25,4 +25,4 @@ def search():
 @main_bp.route('/event/<int:event_id>')
 def event_detail(event_id):
     event = db.get_or_404(Event, event_id)
-    return render_template('event_detail.html', event=event)
+    return render_template('events.html', event=event)

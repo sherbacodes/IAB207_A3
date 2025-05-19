@@ -79,3 +79,16 @@ def comment(id):
         # print('Your comment has been added', 'success') 
     # using redirect sends a GET request to event.show
     return redirect(url_for('event.show', id=id))
+
+@eventbp.route('/cancel_event/<id>', methods=['GET', 'POST'])
+@login_required
+def cancel_event(id):
+    event = db.session.scalar(db.select(Event).where(Event.id==id))
+    if event.user_id != current_user.id:
+        flash('You are not authorized to cancel this event', 'danger')
+        return redirect(url_for('event.show', id=id))
+    
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event cancelled successfully', 'success')
+    return redirect(url_for('event.create'))
