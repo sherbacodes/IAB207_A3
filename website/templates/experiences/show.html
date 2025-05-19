@@ -10,59 +10,88 @@
       <h2 class="section-title mb-2">{{ event.event_name }}</h2>
 
       <div class="d-flex flex-wrap mb-1">
-        <p class="mb-2 me-4">
-          <strong>Time:</strong> {{ event.start_time }} – {{ event.end_time }}
-        </p>
-        <p class="mb-2 me-4">
-          <strong>Date:</strong> {{ event.start_date.strftime('%d-%m-%Y') }} – {{ event.end_date.strftime('%d-%m-%Y') }}
-        </p>
-        <span class="badge rounded-pill text-bg-success mb-2">{{ event.event_status }}</span>
+        <p class="mb-2 me-4"><strong>Time:</strong> {{ event.start_time }} – {{ event.end_time }}</p>
+        <p class="mb-2 me-4"><strong>Date:</strong> {{ event.start_date.strftime('%d-%m-%Y') }} – {{ event.end_date.strftime('%d-%m-%Y') }}</p>
+        {% if event.event_status == 'Cancelled' %}
+          <span class="badge rounded-pill text-bg-danger mb-2">Cancelled</span>
+        {% else %}
+          <span class="badge rounded-pill text-bg-success mb-2">{{ event.event_status }}</span>
+        {% endif %}
       </div>
 
       <p class="mb-2"><strong>Venue:</strong> {{ event.event_location }}</p>
       <p>{{ event.event_description }}</p>
 
-      <button type="button" class="btn button-color button-hover" data-bs-toggle="modal" data-bs-target="#bookingModal">
-        Book Tickets
-      </button>
+      {% if event.event_status == 'Cancelled' %}
+        <button type="button" class="btn button-color button-hover" data-bs-toggle="modal" data-bs-target="#cancelledModal">
+          View Notice
+        </button>
+
+        <!-- Cancelled Event Modal -->
+        <div class="modal fade" id="cancelledModal" tabindex="-1" aria-labelledby="cancelledModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="cancelledModalLabel">Event Cancelled</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p class="fs-5">Oh no! This event has been cancelled. We are really sorry for the inconvenience. Check out our other events or come back soon for updates <span style="font-size: 1.5rem;">😢</span></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary button-color button-hover" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <button type="button" class="btn button-color button-hover" data-bs-toggle="modal" data-bs-target="#bookingModal">
+          Book Tickets
+        </button>
+      {% endif %}
     </div>
   </div>
 
   <div>
     <h3 class="section-title mb-4">Comments</h3>
-    
+
     {% for comment in event.comment.all() %}
-    <div class="d-flex align-items-start border rounded p-3 mb-3 shadow-sm bg-light">
-      <img src="{{ url_for('static', filename=comment.user.profile_image) }}"
-           alt="User Avatar"
-           class="rounded-circle me-3"
-           style="width: 50px; height: 50px;">
-      <div>
-        <div class="fw-bold mb-1">
-          {{ comment.user.first_name }}
-          <small class="text-muted">· {{ comment.date.strftime('%d %b %Y') }}</small>
+      <div class="d-flex align-items-start border rounded p-3 mb-3 shadow-sm bg-light">
+        <img src="{{ url_for('static', filename=comment.user.profile_image) }}"
+             alt="User Avatar"
+             class="rounded-circle me-3"
+             style="width: 50px; height: 50px;">
+        <div>
+          <div class="fw-bold mb-1">
+            {{ comment.user.first_name }}
+            <small class="text-muted">· {{ comment.date.strftime('%d %b %Y') }}</small>
+          </div>
+          <p class="mb-0">{{ comment.content }}</p>
         </div>
-        <p class="mb-0">{{ comment.content }}</p>
       </div>
-    </div>
     {% else %}
-    <p class="text-muted">No comments yet.</p>
+      <p class="text-muted">No comments yet.</p>
     {% endfor %}
 
-    {% if user_authenticated %}
-    <div class="border rounded p-3 shadow-sm bg-white">
-      <form method="POST" action="{{ url_for('event.comment', id=event.id) }}">
-        {{ form.hidden_tag() }}
-        <div class="mb-4">
-          <label for="content" class="form-label modal-label">Add a Comment</label>
-          {{ form.content(class="form-control", rows="3", placeholder="Write your comment here...") }}
-        </div>
-        <button type="submit" class="btn button-color button-hover">Post Comment</button>
-      </form>
-    </div>
+    {% if user_authenticated and event.event_status != 'Cancelled' %}
+      <div class="border rounded p-3 shadow-sm bg-white">
+        <form method="POST" action="{{ url_for('event.comment', id=event.id) }}">
+          {{ form.hidden_tag() }}
+          <div class="mb-4">
+            <label for="content" class="form-label modal-label">Add a Comment</label>
+            {{ form.content(class="form-control", rows="3", placeholder="Write your comment here...") }}
+          </div>
+          <button type="submit" class="btn button-color button-hover">Post Comment</button>
+        </form>
+      </div>
+    {% elif event.event_status == 'Cancelled' %}
+      <div class="alert custom-alert no-auto-close alert-dismissible fade show mt-2" role="alert">
+        This event has been cancelled. No further comments or bookings allowed.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     {% else %}
-    <p class="text-muted">Log in to post a comment.</p>
-    <a href="{{ url_for('auth.login') }}" class="btn button-color button-hover">Login</a>
+      <p class="text-muted">Log in to post a comment.</p>
+      <a href="{{ url_for('auth.login') }}" class="btn button-color button-hover">Login</a>
     {% endif %}
   </div>
 

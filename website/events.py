@@ -83,7 +83,7 @@ def comment(id):
     return redirect(url_for('event.show', id=id))
 
 
-@eventbp.route('/cancel_event/<id>', methods=['GET', 'POST'])
+@eventbp.route('/cancel_event/<id>', methods=['POST'])
 @login_required
 def cancel_event(id):
     event = db.session.scalar(db.select(Event).where(Event.id == id))
@@ -91,7 +91,7 @@ def cancel_event(id):
         flash('You are not authorized to cancel this event', 'danger')
         return redirect(url_for('event.show', id=id))
 
-    db.session.delete(event)
+    event.event_status = 'Cancelled'
     db.session.commit()
-    flash('Event cancelled successfully', 'success')
-    return redirect(url_for('event.create'))
+    flash('Event has been cancelled successfully.', 'success')
+    return redirect(url_for('event.show', id=id))
