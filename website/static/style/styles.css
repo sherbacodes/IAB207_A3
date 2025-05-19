@@ -241,17 +241,27 @@ main {
 }
 
 .card.custom-card {
-  min-height: 500px;
-  max-height: 500px; /* or whatever looks right for your design */
+  min-height: 200px;
+  max-height: 500px;
   display: flex;
   flex-direction: column;
+  background-color: #ff8400;
+  border: none;
+}
+
+.card.custom-card img {
+  height: 300px;
+  object-fit: cover;
 }
 
 .card.custom-card .card-body {
   flex-grow: 1;
-  overflow-y: auto;        /* enables vertical scrolling */
-  max-height: 250px;       /* controls scrollable area height */
-  padding-right: 10px;     /* prevents scrollbar overlap on text */
+  display: flex;
+  flex-direction: column;
+}
+
+.card.custom-card .btn {
+  margin-top: auto;
 }
 
 .custom-link {
