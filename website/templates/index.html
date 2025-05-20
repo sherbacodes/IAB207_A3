@@ -30,23 +30,36 @@
   </div>
 
   <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand category">Category</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link active" href="404.html">Classical</a></li>
-          <li class="nav-item"><a class="nav-link active" href="404.html">Pop</a></li>
-          <li class="nav-item"><a class="nav-link active" href="404.html">Rock</a></li>
-          <li class="nav-item"><a class="nav-link active" href="404.html">Hip-Hop</a></li>
-          <li class="nav-item"><a class="nav-link active" href="404.html">Rap</a></li>
-          <li class="nav-item"><a class="nav-link active" href="404.html">Country</a></li>
-          <li class="nav-item"><a class="nav-link active" href="404.html">Jazz</a></li>
-          <li class="nav-item"><a class="nav-link active" href="404.html">Electronic</a></li>
-        </ul>
+    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+      
+      <!-- Left: Category Label + Links -->
+      <div class="d-flex align-items-center flex-wrap">
+        <a class="navbar-brand category me-3">Category</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse show" id="navbarNav">
+          <ul class="navbar-nav flex-wrap">
+            <li class="nav-item"><a class="nav-link active" href="404.html">Classical</a></li>
+            <li class="nav-item"><a class="nav-link active" href="404.html">Pop</a></li>
+            <li class="nav-item"><a class="nav-link active" href="404.html">Rock</a></li>
+            <li class="nav-item"><a class="nav-link active" href="404.html">Hip-Hop</a></li>
+            <li class="nav-item"><a class="nav-link active" href="404.html">Rap</a></li>
+            <li class="nav-item"><a class="nav-link active" href="404.html">Country</a></li>
+            <li class="nav-item"><a class="nav-link active" href="404.html">Jazz</a></li>
+            <li class="nav-item"><a class="nav-link active" href="404.html">Electronic</a></li>
+          </ul>
+        </div>
       </div>
+
+      <!-- Right: Clear Results Button (only when search is active) -->
+      {% if request.args.get('search') %}
+        <div class="d-flex">
+          <a href="{{ url_for('main.index') }}" class="btn btn-primary button-color button-hover">Clear Results</a>
+        </div>
+      {% endif %}
+
     </div>
   </nav>
 

@@ -133,6 +133,8 @@ header {
 }
 
 /* Button color stays correct on all states */
+.icon-button,
+.icon-button:hover
 .button-color,
 .button-color:hover,
 .button-color:focus,
@@ -282,4 +284,33 @@ main {
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem; /* This controls the spacing */
+}
+.icon-button {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.icon-button {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-button i {
+  color: #a600ff !important;
+}
+
+.icon-button:hover i {
+  color: #ff8400 !important;
 }
