@@ -41,20 +41,20 @@
         </button>
         <div class="collapse navbar-collapse show" id="navbarNav">
           <ul class="navbar-nav flex-wrap">
-            <li class="nav-item"><a class="nav-link active" href="404.html">Classical</a></li>
-            <li class="nav-item"><a class="nav-link active" href="404.html">Pop</a></li>
-            <li class="nav-item"><a class="nav-link active" href="404.html">Rock</a></li>
-            <li class="nav-item"><a class="nav-link active" href="404.html">Hip-Hop</a></li>
-            <li class="nav-item"><a class="nav-link active" href="404.html">Rap</a></li>
-            <li class="nav-item"><a class="nav-link active" href="404.html">Country</a></li>
-            <li class="nav-item"><a class="nav-link active" href="404.html">Jazz</a></li>
-            <li class="nav-item"><a class="nav-link active" href="404.html">Electronic</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Classical">Classical</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Pop">Pop</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Rock">Rock</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Hip-Hop">Hip-Hop</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Rap">Rap</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Country">Country</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Jazz">Jazz</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.search') }}?search=Electronic">Electronic</a></li>
           </ul>
         </div>
       </div>
 
       <!-- Right: Clear Results Button (only when search is active) -->
-      {% if request.args.get('search') %}
+      {% if request.args.get('search') and not cleared %}
         <div class="d-flex">
           <a href="{{ url_for('main.index') }}" class="btn btn-primary button-color button-hover">Clear Results</a>
         </div>
