@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user
+from sqlalchemy import or_
 from .models import Event
 from .forms import CommentForm
 from . import db
@@ -15,10 +16,17 @@ def index():
 # Search Route
 @main_bp.route('/search')
 def search():
-    if request.args.get('search') and request.args['search'].strip() != "":
-        query = "%" + request.args['search'] + "%"
+    search_term = request.args.get('search', '').strip()
+    if search_term:
+        query = f"%{search_term}%"
         events = db.session.scalars(
-            db.select(Event).where(Event.event_name.like(query))
+            db.select(Event).where(
+                or_(
+                    Event.event_name.ilike(query),
+                    Event.event_location.ilike(query),
+                    Event.event_description.ilike(query)
+                )
+            )
         ).all()
         return render_template('index.html', events=events)
     else:
