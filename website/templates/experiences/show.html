@@ -3,8 +3,8 @@
 {% block content %}
 <main class="container my-5">
   <div class="row align-items-center mb-4">
-    <div class="col-12 col-md-6 col-lg-5">
-      <img src="{{ event.event_image }}" alt="Event Image" class="img-fluid rounded mb-3 mb-md-0">
+    <div class="col-12 col-md-6 col-lg-5 text-center">
+      <img src="{{ event.event_image }}" alt="Event Image" class="show-image">
     </div>
     <div class="col-12 col-md-6 col-lg-7">
       <h2 class="section-title mb-2">{{ event.event_name }}</h2>
@@ -45,14 +45,21 @@
           </div>
         </div>
       {% else %}
-        <button type="button" class="btn button-color button-hover" data-bs-toggle="modal" data-bs-target="#bookingModal">
-          Book Tickets
-        </button>
+        <div class="d-flex gap-2 mt-3">
+          <button type="button" class="btn button-color button-hover" data-bs-toggle="modal" data-bs-target="#bookingModal">
+            Book Tickets
+          </button>
+
+          {% if current_user.is_authenticated and event.user_id == current_user.id and event.event_status in ['Open', 'Sold Out'] %}
+            <form action="{{ url_for('event.cancel_event', id=event.id) }}" method="POST">
+              <button type="submit" class="btn btn-danger">Cancel Event</button>
+            </form>
+          {% endif %}
+        </div>
       {% endif %}
     </div>
-  </div>
 
-  <div>
+  <div class="mt-5">
     <h3 class="section-title mb-4">Comments</h3>
 
     {% for comment in event.comment.all() %}

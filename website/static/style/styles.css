@@ -314,3 +314,12 @@ main {
 .icon-button:hover i {
   color: #ff8400 !important;
 }
+
+/* Fixed dimensions for images in the event detail (show.html) page */
+.show-image {
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
