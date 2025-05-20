@@ -53,8 +53,10 @@
                         {% endif %}
                     </ul>
 
-                    <form class="d-flex ms-3" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <!-- Serach for people to index specific events-->
+                    <form action = "{{ url_for(views.search) }}" class="form-inline d-felx flex-nowrap" role="search">
+                        <input class="form-control me-2" type="text" name="search" id="searchForm" class = "form-control" placeholder="Search" aria-label="Search">
+                        <button type="submit" class="felx-shrink-1 btn btn-primary ms-2"> Submit</button>
                     </form>
                 </div>
             </div>

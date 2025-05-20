@@ -18,7 +18,7 @@ def search():
     if request.args.get('search') and request.args['search'].strip() != "":
         query = "%" + request.args['search'] + "%"
         events = db.session.scalars(
-            db.select(Event).where(Event.event_description.like(query))
+            db.select(Event).where(Event.event_name.like(query))
         ).all()
         return render_template('index.html', events=events)
     else:

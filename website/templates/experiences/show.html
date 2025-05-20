@@ -58,9 +58,9 @@
     {% for comment in event.comment.all() %}
       <div class="d-flex align-items-start border rounded p-3 mb-3 shadow-sm bg-light">
         <img src="{{ url_for('static', filename=comment.user.profile_image) }}"
-             alt="User Avatar"
-             class="rounded-circle me-3"
-             style="width: 50px; height: 50px;">
+            alt="User Avatar"
+            class="rounded-circle me-3"
+            style="width: 50px; height: 50px;">
         <div>
           <div class="fw-bold mb-1">
             {{ comment.user.first_name }}

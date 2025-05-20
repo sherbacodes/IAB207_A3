@@ -47,6 +47,11 @@ def create_app():
     @app.errorhandler(404)
     def not_found(e):
         return render_template("404.html", error=e)
+    
+    # 500 error handler
+    @app.errorhandler(500)
+    def not_found(e):
+        return render_template("500.html", error=e)
 
     # Inject current year into templates
     @app.context_processor
