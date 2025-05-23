@@ -2,11 +2,40 @@ import os
 from flask import Blueprint, flash, render_template, request, url_for, redirect, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
-from .models import User
+from .models import User, Order, Event
+from datetime import datetime
 from .forms import LoginForm, RegisterForm, ProfileEditForm
 from . import db, bcrypt
 
 auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/orders')
+@login_required
+def orders():
+    orders = db.session.scalars(db.select(Order).where(Order.user_id == current_user.id)).all()
+    return render_template('orders.html', orders=orders)
+    if not orders:
+        flash("No orders found.", "info")
+
+@auth_bp.route("/book/<int:event_id>", methods = ["POST"])
+@login_required
+def book_event(event_id):
+    event = db.session.scalar(db.select(Event).where(Event.id == event_id))
+    if not event:
+        flash("Event not found.", "danger")
+        return redirect(url_for('main.index'))
+
+    quantity = request.form.get('quantity', type=int)
+    if quantity is None or quantity <= 0:
+        flash("Invalid quantity.", "danger")
+        return redirect(url_for('main.index'))
+
+    total_price = event.ticket_price * quantity
+    order = Order(quantity=quantity, total_price=total_price, event_id=event.id, user_id=current_user.id)
+    db.session.add(order)
+    db.session.commit()
+    flash(f"Successfully booked {quantity} tickets for {event.event_name}.", "success")
+    return redirect(url_for('auth.orders'))
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -126,3 +155,42 @@ def profile():
         return redirect(url_for('auth.profile'))
 
     return render_template('profile.html', form=form, heading="Edit Profile")
+
+
+# Code that i was playing around with that may be useful in the future
+"""
+event = db.session.scalar(db.select(Event).where(Event.id == event_id))
+    if not event:
+        flash("Event not found.", "danger")
+        return redirect(url_for('main.index'))
+
+    quantity = request.form.get('quantity', type=int)
+    if quantity is None or quantity <= 0:
+        flash("Invalid quantity.", "danger")
+        return redirect(url_for('main.index'))
+
+    total_price = event.ticket_price * quantity
+    order = Order(quantity=quantity, total_price=total_price, event_id=event.id, user_id=current_user.id)
+    db.session.add(order)
+    db.session.commit()
+    flash(f"Successfully booked {quantity} tickets for {event.event_name}.", "success")
+    return redirect(url_for('auth.orders'))
+
+    event = db.session.scalar(db.select(Event).where(Event.id == event_id))
+
+    quaantity = int(request.form.get('quantity', type=int))
+    total_price = quaantity * event.ticket_price
+
+    new_order = Order(
+        quantity=quaantity,
+        total_price=total_price,
+        event_id=event.id,
+        user_id=current_user.id,
+        date_ordered=datetime.now()
+    )
+
+    db.session.add(new_order)
+    db.session.commit()
+    flash(f"Successfully booked {quaantity} tickets for {event.event_name}.", "success")
+    return redirect(url_for('main.index'))
+"""

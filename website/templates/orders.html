@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class = "mb-4">My Orders</h2>
+    {% if orders %}
+        <div class="table-responsive">
+            <table class="tabel table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Date Ordered</th>
+                        <th scope="col">Event ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>${{ order.total_price }}</td>
+                            <td>{{ order.date_ordered.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ order.event_id }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted">You have not placed any orders yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

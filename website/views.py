@@ -53,3 +53,4 @@ def event_detail(event_id):
         form=form,
         user_authenticated=current_user.is_authenticated
     )
+
