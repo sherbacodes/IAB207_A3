@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user
 from sqlalchemy import or_
+from datetime import date
 from .models import Event, Category
 from .forms import CommentForm
 from . import db
@@ -10,7 +11,9 @@ main_bp = Blueprint('main', __name__)
 # Homepage Route
 @main_bp.route('/')
 def index():
-    events = db.session.scalars(db.select(Event)).all()
+    events = db.session.scalars(
+        db.select(Event).where(Event.end_date >= date.today())
+    ).all()
     return render_template('index.html', events=events)
 
 # Search Route with fallback and category lookup
@@ -28,14 +31,17 @@ def search():
                     Event.event_location.ilike(query),
                     Event.event_description.ilike(query),
                     Category.name.ilike(query)
-                )
+                ),
+                Event.end_date >= date.today()
             )
         )
         events = db.session.scalars(stmt).all()
 
         if not events:
             flash("No results found.", "warning")
-            events = db.session.scalars(db.select(Event)).all()
+            events = db.session.scalars(
+                db.select(Event).where(Event.end_date >= date.today())
+            ).all()
             return render_template('index.html', events=events, cleared=True)
 
         return render_template('index.html', events=events, cleared=False)
@@ -53,4 +59,3 @@ def event_detail(event_id):
         form=form,
         user_authenticated=current_user.is_authenticated
     )
-
