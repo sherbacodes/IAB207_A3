@@ -132,7 +132,11 @@
             <div class="mb-3">
               <label for="ticketQuantity" class="form-label modal-label">Number of Tickets</label>
               <input type="number" class="form-control" id="ticketQuantity" name="ticketQuantity" min="1" max="10" required>
-              <div class="invalid-feedback">Please enter the number of tickets.</div>
+              <div class="invalid-feedback">Please enter the number of tickets.</div>           
+              <div class="mb-3">
+                <label class="form-label modal-label">Total Price</label>
+                <p id="totalPrice" class="fs-5 fw-bold">$0.00</p>
+              </div>
             </div>
           </div>
           <div class="modal-footer justify-content-between">
@@ -144,4 +148,19 @@
     </div>
   </div>
 </main>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const ticketQuantityInput = document.getElementById('ticketQuantity');
+    const totalPriceDisplay = document.getElementById('totalPrice');
+    const ticketPrice = {{ event.ticket_price|float }};
+
+    function updateTotalPrice() {
+      const quantity = parseInt(ticketQuantityInput.value) || 0;
+      const total = quantity * ticketPrice;
+      totalPriceDisplay.textContent = `$${total.toFixed(2)}`;
+    }
+
+    ticketQuantityInput.addEventListener('input', updateTotalPrice);
+  });
+</script>
 {% endblock %}
