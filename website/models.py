@@ -50,15 +50,6 @@ class Comment(db.Model):
 
     def __repr__(self):
         return f"Comment: {self.content}"
-
-class Order(db.Model):
-    __tablename__ = 'orders'
-    id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer, nullable=False)
-    total_price = db.Column(db.Float, nullable=False)
-    date_ordered = db.Column(db.DateTime, default=datetime)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -66,3 +57,17 @@ class Category(db.Model):
     name = db.Column(db.String(100), nullable=False, unique=True)
 
     events = db.relationship('Event', backref='category')
+
+
+class Booking(db.Model):
+    __tablename__ = 'bookings'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    ticket_type = db.Column(db.String(50), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    total_price = db.Column(db.Float, nullable=False)
+    booking_date = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    user = db.relationship('User', backref='bookings')
+    event = db.relationship('Event', backref='bookings')

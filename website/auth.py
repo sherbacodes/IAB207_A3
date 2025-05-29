@@ -2,8 +2,9 @@ import os
 from flask import Blueprint, flash, render_template, request, url_for, redirect, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
-from .models import User, Order, Event
+from sqlalchemy import func
 from datetime import datetime
+from .models import User, Event, Booking
 from .forms import LoginForm, RegisterForm, ProfileEditForm
 from . import db, bcrypt
 
@@ -12,10 +13,10 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/orders')
 @login_required
 def orders():
-    orders = db.session.query(Order, Event).join(Event, Order.event_id == Event.id).filter(Order.user_id == current_user.id).all()
-    return render_template('orders.html', orders=orders)
+    bookings = db.session.query(Booking).filter_by(user_id=current_user.id).all()
+    return render_template('orders.html', bookings=bookings)
 
-@auth_bp.route("/book/<int:event_id>", methods = ["POST"])
+@auth_bp.route("/book/<int:event_id>", methods=["POST"])
 @login_required
 def book_event(event_id):
     event = db.session.scalar(db.select(Event).where(Event.id == event_id))
@@ -24,21 +25,35 @@ def book_event(event_id):
         return redirect(url_for('main.index'))
 
     quantity = request.form.get('quantity', type=int)
-    if quantity is None or quantity <= 0:
-        flash("Invalid quantity.", "danger")
+    if not quantity or quantity <= 0:
+        flash("Please enter a valid number of tickets.", "danger")
         return redirect(url_for('main.index'))
 
+    # Get already booked quantity
+    already_booked = db.session.query(
+        func.coalesce(func.sum(Booking.quantity), 0)
+    ).filter_by(event_id=event.id).scalar()
+
+    remaining_tickets = event.capacity - already_booked
+
+    if quantity > remaining_tickets:
+        flash(f"Only {remaining_tickets} tickets are available for this event.", "danger")
+        return redirect(url_for('main.index'))
+
+    ticket_type = request.form.get('ticketType', 'Standard')
     total_price = event.ticket_price * quantity
-    order = Order(
-        quantity=quantity, 
-        total_price=total_price, 
-        event_id=event.id, 
-        user_id=current_user.id
-        )
-    
-    db.session.add(order)
+
+    new_booking = Booking(
+        user_id=current_user.id,
+        event_id=event.id,
+        ticket_type=ticket_type,
+        quantity=quantity,
+        total_price=total_price,
+        booking_date=datetime.utcnow()
+    )
+    db.session.add(new_booking)
     db.session.commit()
-    
+
     flash(f"Successfully booked {quantity} tickets for {event.event_name}.", "success")
     return redirect(url_for('auth.orders'))
 
@@ -50,13 +65,11 @@ def register():
         password = form.password.data
         email = form.email.data
 
-        existing_user = db.session.scalar(db.select(User).where(User.username == username))
-        if existing_user:
+        if db.session.scalar(db.select(User).where(User.username == username)):
             flash('Username already exists. Please try another.', 'warning')
             return redirect(url_for('auth.register'))
 
-        existing_email = db.session.scalar(db.select(User).where(User.email == email))
-        if existing_email:
+        if db.session.scalar(db.select(User).where(User.email == email)):
             flash('Email already registered. Please use a different one.', 'warning')
             return redirect(url_for('auth.register'))
 
@@ -91,7 +104,6 @@ def register():
 
     return render_template('user.html', form=form, heading='Register')
 
-
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -110,7 +122,6 @@ def login():
             return redirect(url_for('main.index'))
 
     return render_template('user.html', form=form, heading='Login')
-
 
 @auth_bp.route('/logout')
 @login_required

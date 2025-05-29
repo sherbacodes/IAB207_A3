@@ -120,7 +120,7 @@
         </div>
 
         <!-- <form class="needs-validation" novalidate> -->
-          <form method="POST" action="#" class="needs-validation" novalidate>
+          <form method="POST" action="{{ url_for('auth.book_event', event_id=event.id) }}" class="needs-validation" novalidate>
             {{ form.hidden_tag() }}
             <div class="modal-body">
 
@@ -147,7 +147,7 @@
 
               <div class="mb-3">
                 <label for="ticketQuantity" class="form-label modal-label">Number of Tickets</label>
-                <input type="number" class="form-control" id="ticketQuantity" name="ticketQuantity" min="1" max="10" required>
+                <input type="number" class="form-control" id="ticketQuantity" name="quantity" min="1" required>
                 <div class="invalid-feedback">Please enter the number of tickets.</div>           
               </div>
             </div>
