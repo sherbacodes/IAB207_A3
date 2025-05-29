@@ -52,7 +52,7 @@ def search():
 @main_bp.route('/event/<int:event_id>')
 def event_detail(event_id):
     event = db.get_or_404(Event, event_id)
-    form = CommentForm() if current_user.is_authenticated else None
+    form = CommentForm()
     return render_template(
         'experiences/show.html',
         event=event,
