@@ -12,10 +12,8 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/orders')
 @login_required
 def orders():
-    orders = db.session.scalars(db.select(Order).where(Order.user_id == current_user.id)).all()
+    orders = db.session.query(Order, Event).join(Event, Order.event_id == Event.id).filter(Order.user_id == current_user.id).all()
     return render_template('orders.html', orders=orders)
-    if not orders:
-        flash("No orders found.", "info")
 
 @auth_bp.route("/book/<int:event_id>", methods = ["POST"])
 @login_required
@@ -31,9 +29,16 @@ def book_event(event_id):
         return redirect(url_for('main.index'))
 
     total_price = event.ticket_price * quantity
-    order = Order(quantity=quantity, total_price=total_price, event_id=event.id, user_id=current_user.id)
+    order = Order(
+        quantity=quantity, 
+        total_price=total_price, 
+        event_id=event.id, 
+        user_id=current_user.id
+        )
+    
     db.session.add(order)
     db.session.commit()
+    
     flash(f"Successfully booked {quantity} tickets for {event.event_name}.", "success")
     return redirect(url_for('auth.orders'))
 
@@ -193,4 +198,18 @@ event = db.session.scalar(db.select(Event).where(Event.id == event_id))
     db.session.commit()
     flash(f"Successfully booked {quaantity} tickets for {event.event_name}.", "success")
     return redirect(url_for('main.index'))
+
+
+    <form method="POST" action="{{ url_for('event.book_event', id=event.id) }}">
+              {{ form.hidden_tag() }}
+              <input type="hidden" name="event_id" value="{{ event.id }}">
+              <input type="hidden" name="ticket_price" value="{{ event.ticket_price }}">
+              <button type="button" class="btn button-color button-hover" data-bs-dismiss="modal">Go Back</button>
+              <button type = "submit" class = "btn buttonpcolor button-hover">Book Now !!!</button>
+            </form>
+def orders():
+    orders = db.session.scalars(db.select(Order).where(Order.user_id == current_user.id)).all()
+    return render_template('orders.html', orders=orders)
+    if not orders:
+        flash("No orders found.", "info")
 """
