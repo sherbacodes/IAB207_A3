@@ -119,9 +119,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <!-- <form class="needs-validation" novalidate> -->
-          <form method="POST" action="{{ url_for('auth.book_event', event_id=event.id) }}" class="needs-validation" novalidate>
-            {{ form.hidden_tag() }}
+          <form method="POST" action="{{ url_for('main.event_detail', event_id=event.id) }}" class="needs-validation" novalidate>
             <div class="modal-body">
 
 
