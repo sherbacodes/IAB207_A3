@@ -50,14 +50,13 @@ def search():
 
 # Event Detail Page with Booking Support
 @main_bp.route('/event/<int:event_id>', methods=['GET', 'POST'])
-@login_required
 def event_detail(event_id):
     event = db.get_or_404(Event, event_id)
     form = CommentForm()
 
     if request.method == 'POST':
         ticket_type = request.form.get('ticketType')
-        quantity = int(request.form.get('ticketQuantity', 1))
+        quantity = int(request.form.get('quantity', 1))
         total_price = quantity * event.ticket_price
 
         # Create new booking
@@ -88,3 +87,30 @@ def event_detail(event_id):
 def orders():
     bookings = db.session.query(Booking).filter_by(user_id=current_user.id).all()
     return render_template('orders.html', bookings=bookings)
+
+@main_bp.route('/order/<int:booking_id>', methods=['GET', 'POST'])
+@login_required
+def manage_order(booking_id):
+    booking = db.get_or_404(Booking, booking_id)
+
+    # Prevent access to other users' bookings
+    if booking.user_id != current_user.id:
+        flash("You do not have permission to view this order.", "danger")
+        return redirect(url_for('main.orders'))
+
+    event = db.session.scalar(db.select(Event).where(Event.id == booking.event_id))
+    form = CommentForm()
+
+    # Handle booking cancellation
+    if request.method == 'POST' and 'cancel' in request.form:
+        db.session.delete(booking)
+        db.session.commit()
+        flash("Booking cancelled successfully.", "info")
+        return redirect(url_for('main.orders'))
+
+    return render_template(
+        'order_manage.html',
+        event=event,
+        booking=booking,
+        form=form
+    )

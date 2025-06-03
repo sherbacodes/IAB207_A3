@@ -15,6 +15,7 @@
                         <th scope="col">Ticket Type</th>
                         <th scope="col">Total Price</th>
                         <th scope="col">Booked On</th>
+                        <th scope="col">Manage Order</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,11 @@
                             <td>{{ booking.ticket_type }}</td>
                             <td>${{ '%.2f' | format(booking.total_price) }}</td>
                             <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <a href="{{ url_for('main.manage_order', booking_id=booking.id) }}" class="btn btn-sm btn-outline-primary">
+                                    Manage Order
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

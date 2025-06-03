@@ -65,6 +65,7 @@
         </div>
       {% endif %}
     </div>
+  </div>
 
   <div class="mt-5">
     <h3 class="section-title mb-4">Comments</h3>
@@ -119,47 +120,68 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-          <form method="POST" action="{{ url_for('main.event_detail', event_id=event.id) }}" class="needs-validation" novalidate>
-            <div class="modal-body">
+        <form method="POST" action="{{ url_for('main.event_detail', event_id=event.id) }}" class="needs-validation" novalidate>
+          <div class="modal-body">
 
-
-              <div class="mb-3">
-                <label for="eventDateLocation" class="form-label modal-label">Select Date & Location</label>
-                <select class="form-select" id="eventDateLocation" name="eventDateLocation" required>
-                  <option value="" selected disabled>Select date & location</option>
-                  <option value="{{ event.start_date }}-brisbane">{{ event.start_date }} - {{ event.event_location }}</option>
-                </select>
-                <div class="invalid-feedback">Please select a date and location.</div>
-              </div>
-
-
-              <div class="mb-3">
-                <label for="ticketType" class="form-label modal-label">Ticket Type</label>
-                <select class="form-select" id="ticketType" name="ticketType" required>
-                  <option value="" selected disabled>Select ticket type</option>
-                  <option value="general">General Admission - ${{ event.ticket_price }}</option>
-                </select>
-                <div class="invalid-feedback">Please select a ticket type.</div>
-              </div>
-
-
-              <div class="mb-3">
-                <label for="ticketQuantity" class="form-label modal-label">Number of Tickets</label>
-                <input type="number" class="form-control" id="ticketQuantity" name="quantity" min="1" required>
-                <div class="invalid-feedback">Please enter the number of tickets.</div>           
-              </div>
+            <div class="mb-3">
+              <label for="eventDateLocation" class="form-label modal-label">Select Date & Location</label>
+              <select class="form-select" id="eventDateLocation" name="eventDateLocation" required>
+                <option value="{{ event.start_date }}-brisbane" selected>{{ event.start_date.strftime('%d-%m-%Y') }} - {{ event.event_location }}</option>
+              </select>
+              <div class="invalid-feedback">Please select a date and location.</div>
             </div>
 
-            <input type="hidden" name="event_id" value="{{ event.id }}">
-
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn button-color button-hover" data-bs-dismiss="modal">Go Back</button>
-              <!-- <a href="#" class="btn button-color button-hover">Book Now</a> -->
-              <button type = "submit" class = "btn button-color button-hover">Book Now!!!</button>
+            <div class="mb-3">
+              <label for="ticketType" class="form-label modal-label">Ticket Type</label>
+              <select class="form-select" id="ticketType" name="ticketType" required>
+                <option value="general" data-price="{{ event.ticket_price }}" selected>
+                  General Admission - ${{ event.ticket_price }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a ticket type.</div>
             </div>
-          </form>
+
+            <div class="mb-3">
+              <label for="ticketQuantity" class="form-label modal-label">Number of Tickets</label>
+              <input type="number" class="form-control" id="ticketQuantity" name="quantity" min="1" value="1" required>
+              <div class="invalid-feedback">Please enter the number of tickets.</div>           
+            </div>
+
+            <!-- Live total display -->
+            <p class="fw-bold">Total Price: $<span id="orderTotal">{{ event.ticket_price }}</span></p>
+          </div>
+
+          <input type="hidden" name="event_id" value="{{ event.id }}">
+
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn button-color button-hover" data-bs-dismiss="modal">Go Back</button>
+            <button type="submit" class="btn button-color button-hover">Book Now!!!</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const ticketSelect = document.getElementById('ticketType');
+    const quantityInput = document.getElementById('ticketQuantity');
+    const totalDisplay = document.getElementById('orderTotal');
+
+    function updateTotal() {
+      const selectedOption = ticketSelect.options[ticketSelect.selectedIndex];
+      const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+      const quantity = parseInt(quantityInput.value) || 0;
+      const total = (price * quantity).toFixed(2);
+      totalDisplay.textContent = total;
+    }
+
+    ticketSelect.addEventListener('change', updateTotal);
+    quantityInput.addEventListener('input', updateTotal);
+
+    // Trigger update immediately on page load for default-selected option
+    updateTotal();
+  });
+</script>
 {% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container my-5">
+  <!-- Top Section: Event Header -->
+  <div class="row align-items-center mb-4">
+    <div class="col-12 col-md-6 col-lg-5 text-center">
+      <img src="{{ event.event_image }}" alt="Event Image" class="show-image">
+    </div>
+    <div class="col-12 col-md-6 col-lg-7">
+      <h2 class="section-title mb-2">{{ event.event_name }}</h2>
+      <div class="d-flex flex-wrap mb-1">
+        <p class="mb-2 me-4"><strong>Time:</strong> {{ event.start_time }} – {{ event.end_time }}</p>
+        <p class="mb-2 me-4"><strong>Date:</strong> {{ event.start_date.strftime('%d-%m-%Y') }} – {{ event.end_date.strftime('%d-%m-%Y') }}</p>
+        {% if event.event_status == 'Cancelled' %}
+          <span class="badge rounded-pill text-bg-danger mb-2">Cancelled</span>
+        {% else %}
+          <span class="badge rounded-pill text-bg-success mb-2">{{ event.event_status }}</span>
+        {% endif %}
+      </div>
+      <p class="mb-2"><strong>Venue:</strong> {{ event.event_location }}</p>
+      <p>{{ event.event_description }}</p>
+    </div>
+  </div>
+
+  <!-- Bottom Section: Two Columns -->
+  <div class="row mt-4">
+    <!-- Left: Centered Order Details -->
+    <div class="col-md-6 d-flex justify-content-center align-items-start">
+      <div class="text-start">
+        <h4 class="section-title mb-4 text-center">Order Details</h4>
+        <p><strong>Tickets:</strong> {{ booking.quantity }} × {{ booking.ticket_type }}</p>
+        <p><strong>Total Paid:</strong> ${{ '%.2f' | format(booking.total_price) }}</p>
+        <p><strong>Booked On:</strong> {{ booking.booking_date.strftime('%d-%m-%Y %I:%M %p') }}</p>
+
+        <form method="post" class="text-center">
+          <input type="hidden" name="cancel" value="1">
+          <button type="submit" class="btn btn-danger mt-3">Cancel Order</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right: Comments -->
+    <div class="col-md-6">
+      <h4 class="section-title mb-4">Comments</h4>
+
+      {% for comment in event.comment.all() %}
+        <div class="d-flex align-items-start border rounded p-3 mb-3 shadow-sm bg-light">
+          <img src="{{ url_for('static', filename=comment.user.profile_image) }}"
+              alt="User Avatar"
+              class="rounded-circle me-3"
+              style="width: 50px; height: 50px;">
+          <div>
+            <div class="fw-bold mb-1">
+              {{ comment.user.first_name }}
+              <small class="text-muted">· {{ comment.date.strftime('%d %b %Y') }}</small>
+            </div>
+            <p class="mb-0">{{ comment.content }}</p>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted">No comments yet.</p>
+      {% endfor %}
+
+      {% if current_user.is_authenticated %}
+        <div class="border rounded p-3 shadow-sm bg-white">
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-4">
+              <label for="content" class="form-label modal-label">Add a Comment</label>
+              {{ form.content(class="form-control", rows="3", placeholder="Write your comment here...") }}
+            </div>
+            <button type="submit" class="btn button-color button-hover">Post Comment</button>
+          </form>
+        </div>
+      {% else %}
+        <p class="text-muted">Log in to post a comment.</p>
+        <a href="{{ url_for('auth.login') }}" class="btn button-color button-hover">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock %}
