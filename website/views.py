@@ -54,9 +54,21 @@ def event_detail(event_id):
     event = db.get_or_404(Event, event_id)
     form = CommentForm()
 
+    # Calculate tickets already booked
+    already_booked = db.session.query(
+        db.func.coalesce(db.func.sum(Booking.quantity), 0)
+    ).filter_by(event_id=event.id).scalar()
+
+    remaining_tickets = event.capacity - already_booked
+
     if request.method == 'POST':
         ticket_type = request.form.get('ticketType')
         quantity = int(request.form.get('quantity', 1))
+
+        if quantity > remaining_tickets:
+            flash(f"Only {remaining_tickets} tickets available. Please adjust your quantity.", "danger")
+            return redirect(url_for('main.event_detail', event_id=event.id))
+
         total_price = quantity * event.ticket_price
 
         # Create new booking
@@ -69,6 +81,15 @@ def event_detail(event_id):
             booking_date=datetime.utcnow()
         )
         db.session.add(new_booking)
+
+        # Recalculate remaining tickets
+        booked_tickets = db.session.query(db.func.sum(Booking.quantity)).filter_by(event_id=event.id).scalar() or 0
+        remaining = event.capacity - booked_tickets
+
+        # Update event status if sold out
+        if remaining <= 0:
+            event.event_status = 'Sold Out'
+
         db.session.commit()
 
         flash('Your tickets have been booked successfully!', 'success')
@@ -78,7 +99,8 @@ def event_detail(event_id):
         'experiences/show.html',
         event=event,
         form=form,
-        user_authenticated=current_user.is_authenticated
+        user_authenticated=current_user.is_authenticated,
+        remaining_tickets=remaining_tickets
     )
 
 # Orders Page
