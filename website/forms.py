@@ -3,6 +3,7 @@ from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordFiel
 from wtforms.validators import InputRequired, Email, EqualTo, Regexp, ValidationError, NumberRange
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 from wtforms import SelectField
+from datetime import date
 
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
 
@@ -27,6 +28,15 @@ class EventManagementForm(FlaskForm):
     ticket_price = IntegerField('Ticket Price ($)', validators=[InputRequired(), NumberRange(min=0, message='Ticket price cannot be negative')])
     capacity = IntegerField('Capacity', validators=[InputRequired(), NumberRange(min=1, message='Capacity must be at least 1')])
     submit = SubmitField("Create")
+
+    # Custom validators to prevent past event creation
+    def validate_start_date(self, field):
+        if field.data < date.today():
+            raise ValidationError("Start date cannot be in the past.")
+
+    def validate_end_date(self, field):
+        if self.start_date.data and field.data < self.start_date.data:
+            raise ValidationError("End date cannot be before the start date.")
 
 # Login form
 class LoginForm(FlaskForm):

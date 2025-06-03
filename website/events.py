@@ -14,6 +14,11 @@ def show(id):
     event = db.session.scalar(db.select(Event).where(Event.id == id))
     form = CommentForm() if current_user.is_authenticated else None
 
+    # Update event status if event is in the past
+    if event.end_date < datetime.utcnow().date() and event.event_status not in ['Cancelled', 'Inactive']:
+        event.event_status = 'Inactive'
+        db.session.commit()
+
     # Calculate remaining tickets
     total_booked = db.session.query(db.func.sum(Booking.quantity)).filter_by(event_id=event.id).scalar() or 0
     remaining_tickets = event.capacity - total_booked
