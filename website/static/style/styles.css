@@ -323,3 +323,33 @@ main {
   object-fit: cover;
   border-radius: 0.5rem;
 }
+
+/* Table styling headings to make it match the overall theme */
+table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  background-color: #ffffff;
+}
+
+thead th {
+  background-color: #6200ea !important;
+  color: white !important;
+  font-weight: 600;
+  text-align: left;
+}
+
+tbody tr:hover {
+  background-color: #f1f3f9;
+  transition: 0.2s;
+}
+
+td, th {
+  padding: 1rem !important;
+  vertical-align: middle !important;
+}
+
+.text-muted {
+  font-style: italic;
+  font-size: 1rem;
+}
