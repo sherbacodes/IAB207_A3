@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from .models import Event, Comment, Category
+from .models import Event, Comment, Category, Booking
 from .forms import EventManagementForm, CommentForm
 from . import db
 import os
@@ -13,11 +13,17 @@ eventbp = Blueprint('event', __name__, url_prefix='/experiences')
 def show(id):
     event = db.session.scalar(db.select(Event).where(Event.id == id))
     form = CommentForm() if current_user.is_authenticated else None
+
+    # Calculate remaining tickets
+    total_booked = db.session.query(db.func.sum(Booking.quantity)).filter_by(event_id=event.id).scalar() or 0
+    remaining_tickets = event.capacity - total_booked
+
     return render_template(
         'experiences/show.html',
         event=event,
         form=form,
-        user_authenticated=current_user.is_authenticated
+        user_authenticated=current_user.is_authenticated,
+        remaining_tickets=remaining_tickets
     )
 
 
