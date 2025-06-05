@@ -29,7 +29,6 @@ class EventManagementForm(FlaskForm):
     capacity = IntegerField('Capacity', validators=[InputRequired(), NumberRange(min=1, message='Capacity must be at least 1')])
     submit = SubmitField("Create")
 
-    # Custom validators to prevent past event creation
     def validate_start_date(self, field):
         if field.data < date.today():
             raise ValidationError("Start date cannot be in the past.")
@@ -74,7 +73,7 @@ class RegisterForm(FlaskForm):
         EqualTo('confirm', message="Passwords should match"),
         no_spaces
     ])
-    confirm = PasswordField("Confirm Password", validators=[no_spaces])
+    confirm = PasswordField("Confirm Password", validators=[InputRequired(), no_spaces])
 
     submit = SubmitField("Register")
 
