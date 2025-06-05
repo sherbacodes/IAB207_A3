@@ -78,7 +78,7 @@
         <img src="{{ url_for('static', filename=comment.user.profile_image) }}" alt="User Avatar" class="rounded-circle me-3" style="width: 50px; height: 50px;">
         <div>
           <div class="fw-bold mb-1">
-            {{ comment.user.first_name }} <small class="text-muted">· {{ comment.date.strftime('%d %b %Y') }}</small>
+            {{ comment.user.username }} <small class="text-muted">· {{ comment.date.strftime('%d %b %Y') }}</small>
           </div>
           <p class="mb-0">{{ comment.content }}</p>
         </div>
