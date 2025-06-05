@@ -5,6 +5,7 @@ from . import db
 import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
+from datetime import datetime
 
 eventbp = Blueprint('event', __name__, url_prefix='/experiences')
 
@@ -15,7 +16,7 @@ def show(id):
     form = CommentForm() if current_user.is_authenticated else None
 
     # Update event status if event is in the past
-    if event.end_date < datetime.utcnow().date() and event.event_status not in ['Cancelled', 'Inactive']:
+    if event.end_date.date() < datetime.utcnow().date() and event.event_status not in ['Cancelled', 'Inactive']:
         event.event_status = 'Inactive'
         db.session.commit()
 
