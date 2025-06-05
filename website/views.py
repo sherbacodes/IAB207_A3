@@ -65,6 +65,10 @@ def event_detail(event_id):
         ticket_type = request.form.get('ticketType')
         quantity = int(request.form.get('quantity', 1))
 
+        if quantity < 1:
+            flash("You must book at least 1 ticket.", "danger")
+            return redirect(url_for('main.event_detail', event_id=event.id))
+
         if quantity > remaining_tickets:
             flash(f"Only {remaining_tickets} tickets available. Please adjust your quantity.", "danger")
             return redirect(url_for('main.event_detail', event_id=event.id))
