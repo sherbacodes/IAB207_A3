@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Events</h2>
+
+    <!-- Active Events Section -->
+    <h4 class="mb-3">Active Events</h4>
+    {% if active_events %}
+        <div class="table-responsive mb-5">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Event ID</th>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Manage Event</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in active_events %}
+                        <tr>
+                            <td>{{ event.id }}</td>
+                            <td>{{ event.event_name }}</td>
+                            <td>{{ event.category.name }}</td>
+                            <td>{{ event.start_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ event.end_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ event.event_status }}</td>
+                            <td>
+                                <a href="{{ url_for('event.manage_event', id=event.id) }}" class="btn btn-sm button-color button-hover">
+                                    Manage Event
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-5">You currently have no upcoming events.</p>
+    {% endif %}
+
+    <!-- Past Events Section -->
+    <h4 class="mb-3">Past Events</h4>
+    {% if past_events %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Event ID</th>
+                        <th scope="col">Event Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in past_events %}
+                        <tr>
+                            <td>{{ event.id }}</td>
+                            <td>{{ event.event_name }}</td>
+                            <td>{{ event.category.name }}</td>
+                            <td>{{ event.start_date.strftime('%d-%m-%Y') }}</td>
+                            <td>{{ event.end_date.strftime('%d-%m-%Y') }}</td>
+                            <td>{{ event.event_status }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted">You have no past events.</p>
+    {% endif %}
+</div>
+{% endblock %}

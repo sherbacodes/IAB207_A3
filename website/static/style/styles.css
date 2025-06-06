@@ -333,7 +333,7 @@ table {
 }
 
 thead th {
-  background-color: #6200ea !important;
+  background-color: #a600ff !important;
   color: white !important;
   font-weight: 600;
   text-align: left;
@@ -347,9 +347,4 @@ tbody tr:hover {
 td, th {
   padding: 1rem !important;
   vertical-align: middle !important;
-}
-
-.text-muted {
-  font-style: italic;
-  font-size: 1rem;
 }

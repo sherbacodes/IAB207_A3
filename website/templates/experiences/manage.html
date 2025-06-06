@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="section-title mb-4">Manage Event</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.event_name.label(class="form-label") }}
+                {{ form.event_name(class="form-control") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.category_id.label(class="form-label") }}
+                {{ form.category_id(class="form-select") }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form.event_description.label(class="form-label") }}
+            {{ form.event_description(class="form-control", rows="4") }}
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.start_date.label(class="form-label") }}
+                {{ form.start_date(class="form-control") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.end_date.label(class="form-label") }}
+                {{ form.end_date(class="form-control") }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.start_time.label(class="form-label") }}
+                {{ form.start_time(class="form-control") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.end_time.label(class="form-label") }}
+                {{ form.end_time(class="form-control") }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form.event_location.label(class="form-label") }}
+            {{ form.event_location(class="form-control") }}
+        </div>
+
+        <div class="row mb-4 align-items-start">
+            <div class="col-md-4">
+                <label class="form-label">Current Event Image</label><br>
+                <img src="{{ event.event_image }}" alt="Current Event Image" class="img-fluid rounded border shadow-sm">
+            </div>
+            <div class="col-md-8">
+                <div class="mb-3">
+                    {{ form.event_image.label(class="form-label") }}
+                    {{ form.event_image(class="form-control") }}
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        {{ form.ticket_price.label(class="form-label") }}
+                        {{ form.ticket_price(class="form-control") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.capacity.label(class="form-label") }}
+                        {{ form.capacity(class="form-control") }}
+                    </div>
+                </div>
+
+                {% if remaining_tickets is not none %}
+                    <div class="text-muted mt-1">
+                        <small>
+                            <strong>Tickets Remaining:</strong> {{ remaining_tickets }} / {{ event.capacity }}
+                        </small><br>
+                        {% if remaining_tickets < event.capacity %}
+                            <small class="text-danger">
+                                You cannot reduce the capacity below {{ event.capacity - remaining_tickets }} (tickets already sold). Please contact the event website for refund assistance.
+                            </small>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="d-flex gap-3 mt-4">
+            <button type="submit" class="btn button-color button-hover">Update Event</button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel Event</button>
+        </div>
+    </form>
+
+    <!-- Cancel Confirmation Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cancelModalLabel">Confirm Cancellation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to cancel the event <strong>{{ event.event_name }}</strong>? This action cannot be undone.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn button-color button-hover" data-bs-dismiss="modal">No, Keep Event</button>
+            <form method="POST" action="{{ url_for('event.cancel_event', id=event.id) }}">
+                <button type="submit" class="btn btn-danger">Yes, Cancel Event</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

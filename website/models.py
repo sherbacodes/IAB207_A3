@@ -1,6 +1,7 @@
 from . import db
 from datetime import datetime
 from flask_login import UserMixin
+from sqlalchemy import Time
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -27,9 +28,9 @@ class Event(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     event_description = db.Column(db.Text, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
-    start_time = db.Column(db.String(150), nullable=False)
+    start_time = db.Column(Time, nullable=False)  # Changed from String to Time
     end_date = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.String(150), nullable=False)
+    end_time = db.Column(Time, nullable=False)    # Changed from String to Time
     event_location = db.Column(db.String(150), nullable=False)
     event_image = db.Column(db.String(150), nullable=False)
     ticket_price = db.Column(db.Float, nullable=False)

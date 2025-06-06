@@ -29,7 +29,6 @@ def book_event(event_id):
         flash("Please enter a valid number of tickets.", "danger")
         return redirect(url_for('main.index'))
 
-    # Get already booked quantity
     already_booked = db.session.query(
         func.coalesce(func.sum(Booking.quantity), 0)
     ).filter_by(event_id=event.id).scalar()
@@ -101,6 +100,12 @@ def register():
         db.session.commit()
         flash('Registration successful. You can now log in.', 'success')
         return redirect(url_for('auth.login'))
+
+    elif request.method == "POST":
+        for field_name, errors in form.errors.items():
+            label = getattr(form, field_name).label.text
+            for error in errors:
+                flash(f"{label}: {error}", "info")
 
     return render_template('user.html', form=form, heading='Register')
 
