@@ -28,7 +28,7 @@
                             <td>${{ '%.2f' | format(booking.total_price) }}</td>
                             <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
                             <td>
-                                <a href="{{ url_for('main.manage_order', booking_id=booking.id) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ url_for('main.manage_order', booking_id=booking.id) }}" class="btn btn-sm button-color button-hover">
                                     Manage Order
                                 </a>
                             </td>

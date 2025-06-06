@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from sqlalchemy import or_
 from datetime import date, datetime
-from .models import Event, Category, Booking
+from .models import Event, Category, Booking, Comment
 from .forms import CommentForm
 from . import db
 
@@ -48,65 +48,6 @@ def search():
 
     return redirect(url_for('main.index'))
 
-# Event Detail Page with Booking Support
-@main_bp.route('/event/<int:event_id>', methods=['GET', 'POST'])
-def event_detail(event_id):
-    event = db.get_or_404(Event, event_id)
-    form = CommentForm()
-
-    # Calculate tickets already booked
-    already_booked = db.session.query(
-        db.func.coalesce(db.func.sum(Booking.quantity), 0)
-    ).filter_by(event_id=event.id).scalar()
-
-    remaining_tickets = event.capacity - already_booked
-
-    if request.method == 'POST':
-        ticket_type = request.form.get('ticketType')
-        quantity = int(request.form.get('quantity', 1))
-
-        if quantity < 1:
-            flash("You must book at least 1 ticket.", "danger")
-            return redirect(url_for('main.event_detail', event_id=event.id))
-
-        if quantity > remaining_tickets:
-            flash(f"Only {remaining_tickets} tickets available. Please adjust your quantity.", "danger")
-            return redirect(url_for('main.event_detail', event_id=event.id))
-
-        total_price = quantity * event.ticket_price
-
-        # Create new booking
-        new_booking = Booking(
-            user_id=current_user.id,
-            event_id=event.id,
-            ticket_type=ticket_type,
-            quantity=quantity,
-            total_price=total_price,
-            booking_date=datetime.utcnow()
-        )
-        db.session.add(new_booking)
-
-        # Recalculate remaining tickets
-        booked_tickets = db.session.query(db.func.sum(Booking.quantity)).filter_by(event_id=event.id).scalar() or 0
-        remaining = event.capacity - booked_tickets
-
-        # Update event status if sold out
-        if remaining <= 0:
-            event.event_status = 'Sold Out'
-
-        db.session.commit()
-
-        flash('Your tickets have been booked successfully!', 'success')
-        return redirect(url_for('main.orders'))
-
-    return render_template(
-        'experiences/show.html',
-        event=event,
-        form=form,
-        user_authenticated=current_user.is_authenticated,
-        remaining_tickets=remaining_tickets
-    )
-
 # Orders Page
 @main_bp.route('/orders')
 @login_required
@@ -127,12 +68,24 @@ def manage_order(booking_id):
     event = db.session.scalar(db.select(Event).where(Event.id == booking.event_id))
     form = CommentForm()
 
-    # Handle booking cancellation
-    if request.method == 'POST' and 'cancel' in request.form:
-        db.session.delete(booking)
-        db.session.commit()
-        flash("Booking cancelled successfully.", "info")
-        return redirect(url_for('main.orders'))
+    if request.method == 'POST':
+        if 'cancel' in request.form:
+            db.session.delete(booking)
+            db.session.commit()
+            flash("Booking cancelled successfully.", "info")
+            return redirect(url_for('main.orders'))
+        elif form.validate_on_submit():
+            new_comment = form.content.data
+            comment = Comment(
+                content=new_comment,
+                user_id=current_user.id,
+                event_id=event.id,
+                date=datetime.utcnow()
+            )
+            db.session.add(comment)
+            db.session.commit()
+            flash("Comment posted successfully.", "success")
+            return redirect(url_for('main.manage_order', booking_id=booking.id))
 
     return render_template(
         'order_manage.html',

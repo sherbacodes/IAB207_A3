@@ -1,13 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, IntegerField, DateField, TimeField, FloatField
 from wtforms.validators import InputRequired, Email, EqualTo, Regexp, ValidationError, NumberRange
-from flask_wtf.file import FileRequired, FileField, FileAllowed
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import SelectField
 from datetime import date
 
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'png', 'jpg', 'jpeg'}
 
-# Create an event form
 class EventManagementForm(FlaskForm):
     event_name = StringField('Event name', validators=[InputRequired()])
     category_id = SelectField(
@@ -22,7 +21,6 @@ class EventManagementForm(FlaskForm):
     end_time = TimeField('End Time', validators=[InputRequired()])
     event_location = StringField('Location', validators=[InputRequired()])
     event_image = FileField('Event Image', validators=[
-        FileRequired(message='Image cannot be empty'),
         FileAllowed(ALLOWED_FILE, message='Only supports PNG, JPG, png, jpg')
     ])
     ticket_price = IntegerField('Ticket Price ($)', validators=[InputRequired(), NumberRange(min=0, message='Ticket price cannot be negative')])
@@ -37,18 +35,15 @@ class EventManagementForm(FlaskForm):
         if self.start_date.data and field.data < self.start_date.data:
             raise ValidationError("End date cannot be before the start date.")
 
-# Login form
 class LoginForm(FlaskForm):
     username = StringField("User Name", validators=[InputRequired('Enter user name')])
     password = PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
-# Custom validator to check for spaces in the field
 def no_spaces(form, field):
     if ' ' in field.data:
         raise ValidationError("Spaces are not allowed in this field.")
 
-# Registration form
 class RegisterForm(FlaskForm):
     username = StringField("User Name", validators=[InputRequired(), no_spaces])
     first_name = StringField("First Name", validators=[InputRequired(), no_spaces])
@@ -77,12 +72,10 @@ class RegisterForm(FlaskForm):
 
     submit = SubmitField("Register")
 
-# Comment form
 class CommentForm(FlaskForm):
     content = TextAreaField('Comment', validators=[InputRequired()])
     submit = SubmitField('Post Comment')
 
-# Profile editing form
 class ProfileEditForm(FlaskForm):
     username = StringField("User Name", validators=[InputRequired(), no_spaces])
     first_name = StringField("First Name", validators=[InputRequired(), no_spaces])
