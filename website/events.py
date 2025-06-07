@@ -105,22 +105,20 @@ def create():
 @login_required
 def my_events():
     today = datetime.utcnow().date()
-    active_events = Event.query.filter(Event.user_id == current_user.id, Event.end_date >= today).all()
-    past_events = Event.query.filter(Event.user_id == current_user.id, Event.end_date < today).all()
+    events = Event.query.filter_by(user_id=current_user.id).all()
+
+    for event in events:
+        event_end_date = event.end_date.date()  # ensure consistent type
+        if event_end_date < today and event.event_status not in ['Cancelled', 'Inactive']:
+            event.event_status = 'Inactive'
+
+    db.session.commit()
+
+    # Filter using .date() for correct logic
+    active_events = [e for e in events if e.end_date.date() >= today]
+    past_events = [e for e in events if e.end_date.date() < today]
+
     return render_template('experiences/my_events.html', active_events=active_events, past_events=past_events)
-
-
-def check_upload_file(form):
-    fp = form.event_image.data
-    if not hasattr(fp, 'filename') or not fp.filename:
-        return None
-
-    filename = secure_filename(fp.filename)
-    BASE_PATH = os.path.dirname(__file__)
-    upload_path = os.path.join(BASE_PATH, 'static/img', filename)
-    db_upload_path = '/static/img/' + filename
-    fp.save(upload_path)
-    return db_upload_path
 
 
 @eventbp.route('/<id>/comment', methods=['POST'])

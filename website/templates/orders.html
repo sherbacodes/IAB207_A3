@@ -9,24 +9,26 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Booking ID</th>
+                        <th scope="col" class="d-none d-md-table-cell">Booking ID</th>
                         <th scope="col">Event</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Ticket Type</th>
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Booked On</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col" class="d-none d-md-table-cell">Quantity</th>
+                        <th scope="col" class="d-none d-md-table-cell">Ticket Type</th>
+                        <th scope="col" class="d-none d-md-table-cell">Total Price</th>
                         <th scope="col">Manage Order</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for booking in bookings %}
                         <tr>
-                            <td>{{ booking.id }}</td>
+                            <td class="d-none d-md-table-cell">{{ booking.id }}</td>
                             <td>{{ booking.event.event_name }}</td>
-                            <td>{{ booking.quantity }}</td>
-                            <td>{{ booking.ticket_type }}</td>
-                            <td>${{ '%.2f' | format(booking.total_price) }}</td>
-                            <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ booking.event.start_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ booking.event.end_date.strftime('%Y-%m-%d') }}</td>
+                            <td class="d-none d-md-table-cell">{{ booking.quantity }}</td>
+                            <td class="d-none d-md-table-cell">{{ booking.ticket_type }}</td>
+                            <td class="d-none d-md-table-cell">${{ '%.2f' | format(booking.total_price) }}</td>
                             <td>
                                 <a href="{{ url_for('main.manage_order', booking_id=booking.id) }}" class="btn btn-sm button-color button-hover">
                                     Manage Order

@@ -11,9 +11,9 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Event ID</th>
+                        <th class="d-none d-md-table-cell" scope="col">Event ID</th>
                         <th scope="col">Event Name</th>
-                        <th scope="col">Category</th>
+                        <th class="d-none d-md-table-cell" scope="col">Category</th>
                         <th scope="col">Start Date</th>
                         <th scope="col">End Date</th>
                         <th scope="col">Status</th>
@@ -23,11 +23,11 @@
                 <tbody>
                     {% for event in active_events %}
                         <tr>
-                            <td>{{ event.id }}</td>
+                            <td class="d-none d-md-table-cell">{{ event.id }}</td>
                             <td>{{ event.event_name }}</td>
-                            <td>{{ event.category.name }}</td>
-                            <td>{{ event.start_date.strftime('%Y-%m-%d') }}</td>
-                            <td>{{ event.end_date.strftime('%Y-%m-%d') }}</td>
+                            <td class="d-none d-md-table-cell">{{ event.category.name }}</td>
+                            <td>{{ event.start_date.strftime('%d-%m-%Y') }}</td>
+                            <td>{{ event.end_date.strftime('%d-%m-%Y') }}</td>
                             <td>{{ event.event_status }}</td>
                             <td>
                                 <a href="{{ url_for('event.manage_event', id=event.id) }}" class="btn btn-sm button-color button-hover">
@@ -50,9 +50,9 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Event ID</th>
+                        <th class="d-none d-md-table-cell" scope="col">Event ID</th>
                         <th scope="col">Event Name</th>
-                        <th scope="col">Category</th>
+                        <th class="d-none d-md-table-cell" scope="col">Category</th>
                         <th scope="col">Start Date</th>
                         <th scope="col">End Date</th>
                         <th scope="col">Status</th>
@@ -61,9 +61,9 @@
                 <tbody>
                     {% for event in past_events %}
                         <tr>
-                            <td>{{ event.id }}</td>
+                            <td class="d-none d-md-table-cell">{{ event.id }}</td>
                             <td>{{ event.event_name }}</td>
-                            <td>{{ event.category.name }}</td>
+                            <td class="d-none d-md-table-cell">{{ event.category.name }}</td>
                             <td>{{ event.start_date.strftime('%d-%m-%Y') }}</td>
                             <td>{{ event.end_date.strftime('%d-%m-%Y') }}</td>
                             <td>{{ event.event_status }}</td>
